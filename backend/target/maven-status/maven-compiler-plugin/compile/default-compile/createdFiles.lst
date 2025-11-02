@@ -1,6 +1,8 @@
 com\example\demo\DemoApplication.class
 com\example\demo\model\User$UserBuilder.class
 com\example\demo\service\UserService.class
+com\example\Alert1.class
 com\example\demo\controller\UserController.class
+com\example\Alert1$1.class
 com\example\demo\model\User.class
 com\example\demo\repository\UserRepository.class
