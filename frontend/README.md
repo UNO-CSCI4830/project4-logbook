@@ -2,7 +2,7 @@
 
 ## Run
 ```
-Make sure you have npm installed as well as all of the content in login-page
+Make sure you have npm installed as well as all of the content in frontend
 npm install
 
 Move into the pages folder on your terminal and run:
