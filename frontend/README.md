@@ -3,6 +3,7 @@
 ## Run
 ```
 Make sure you have npm installed as well as all of the content in login-page
+If the pages folder does not contain the node_modules folder or the package.json files, then you do not have npm installed
 npm install
 
 Move into the pages folder on your terminal and run:
