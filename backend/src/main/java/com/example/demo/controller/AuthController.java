@@ -9,14 +9,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 import com.example.demo.model.UserCredentials;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.model.User;
+
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class AuthController {
+    private final UserRepository userRepository;
+
+    public AuthController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserCredentials creds) {
-        if ("user".equals(creds.getUsername()) && "pass".equals(creds.getPassword())) {
+        User user = userRepository.findByEmail(creds.getEmail());
+        if (user != null && user.getPassword().equals(creds.getPassword())) {
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
