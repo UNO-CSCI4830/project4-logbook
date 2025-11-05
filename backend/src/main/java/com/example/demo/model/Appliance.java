@@ -35,5 +35,8 @@ public class Appliance {
 
     @Column(nullable=true)
     private Date alertDate;
+
+    @Column(nullable = false)
+    private Long userId;
     
 }

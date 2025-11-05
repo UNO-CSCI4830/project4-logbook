@@ -1,11 +1,5 @@
 com/example/demo/DemoApplication.class
-com/example/demo/repository/UserRepository.class
+com/example/demo/service/ApplianceService.class
 com/example/demo/repository/ApplianceRepository.class
 com/example/demo/controller/ApplianceController.class
-com/example/demo/controller/UserController.class
-com/example/demo/model/UserCredentials.class
-com/example/demo/model/User.class
-com/example/demo/service/ApplianceService.class
-com/example/demo/service/UserService.class
 com/example/demo/model/Appliance.class
-com/example/demo/controller/AuthController.class
