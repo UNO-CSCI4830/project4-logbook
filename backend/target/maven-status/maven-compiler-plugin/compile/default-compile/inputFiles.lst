@@ -1,5 +1,11 @@
-C:\Users\edwin\Desktop\CSCI_Project\project4-logbook\backend\src\main\java\com\example\demo\controller\UserController.java
-C:\Users\edwin\Desktop\CSCI_Project\project4-logbook\backend\src\main\java\com\example\demo\DemoApplication.java
-C:\Users\edwin\Desktop\CSCI_Project\project4-logbook\backend\src\main\java\com\example\demo\model\User.java
-C:\Users\edwin\Desktop\CSCI_Project\project4-logbook\backend\src\main\java\com\example\demo\repository\UserRepository.java
-C:\Users\edwin\Desktop\CSCI_Project\project4-logbook\backend\src\main\java\com\example\demo\service\UserService.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/DemoApplication.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/ApplianceController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/AuthController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/UserController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/Appliance.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/User.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/UserCredentials.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/ApplianceRepository.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/UserRepository.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/ApplianceService.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/UserService.java
