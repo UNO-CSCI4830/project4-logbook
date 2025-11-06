@@ -27,7 +27,7 @@ public class ApplianceController {
     }
 
     @PostMapping
-    public Appliance creatAppliance(@RequestBody Appliance appliance) {
+    public Appliance createAppliance(@RequestBody Appliance appliance) {
         return applianceService.saveAppliance(appliance);
     }
 
