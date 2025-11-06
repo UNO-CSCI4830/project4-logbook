@@ -1,1 +1,5 @@
-com\example\demo\DemoApplication.class
+com/example/demo/DemoApplication.class
+com/example/demo/service/ApplianceService.class
+com/example/demo/repository/ApplianceRepository.class
+com/example/demo/controller/ApplianceController.class
+com/example/demo/model/Appliance.class

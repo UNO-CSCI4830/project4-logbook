@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-
 import com.example.demo.model.UserCredentials;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.model.User;
