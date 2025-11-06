@@ -1,6 +1,16 @@
+'use client'
 import Image from "next/image"
+import { useRouter} from "next/navigation"
+import { useState, useEffect} from "react"
 
 const Navbar = () => {
+  const router = useRouter();
+  
+  const handleLogout = () => {
+    router.push('/login');
+  };
+
+ 
   return (
     <div className='flex items-center justify-between p-4'>
       {/* Search bar */}
@@ -22,6 +32,13 @@ const Navbar = () => {
           <span className="text-[10px] text-gray-500 text-right">User</span>
         </div>
         <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2"
+        >
+          <Image src="/logout.png" alt="logout" width={16} height={16}/>
+          Logout
+        </button>
       </div>
     </div>
   )

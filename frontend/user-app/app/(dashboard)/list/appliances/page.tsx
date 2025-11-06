@@ -62,7 +62,7 @@ export default function AppliancesPage() {
     const renderRow = (appliance: Appliance) => (
         <tr key={appliance.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-purple-300">
             <td className="flex items-center gap-4 p-4">
-                <Link href={`/list/appliances/${appliance.id}/edit`} className="link">
+                <Link href={`/list/appliances/${appliance.id}/view`} className="font-bold hover:underline">
                     {appliance.name}
                 </Link>
             </td>
@@ -72,11 +72,11 @@ export default function AppliancesPage() {
             <td className="p-4 text-right">
                 <div className="flex items-center gap-2">
                     <Link href={`/list/appliances/${appliance.id}/edit`}>
-                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-purple-300">
+                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-purple-300 hover:bg-gray-200">
                             <Image src="/edit.png" alt="" width={14} height={14} />
                         </button>
                     </Link>
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-lamaSky" onClick={() => onDelete(appliance.id)} 
+                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-yellow-500 hover:bg-gray-200" onClick={() => onDelete(appliance.id)} 
                     disabled={deleteing === appliance.id}>
                         {deleteing === appliance.id ? (
                             <span className="text-xs">...</span>

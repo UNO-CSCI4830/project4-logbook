@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
 import { ApplianceForm } from '../../shared/ApplianceForm';
@@ -9,6 +9,7 @@ const service = new ApplianceService();
 
 export default function EditAppliancePage() {
     const id = Number(useParams()?.id);
+    const router = useRouter();
     const [initial, setInitial] = useState<Appliance | null>(null);
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export default function EditAppliancePage() {
 
     async function onSubmit(patch: Appliance) {
         await service.update(id, patch);
-        alert('Saved');
+        router.push(`/list/appliances/${id}/view`);
     }
 
     if (!initial) return <div className="text-gray-500 p-4">Loading…</div>;
