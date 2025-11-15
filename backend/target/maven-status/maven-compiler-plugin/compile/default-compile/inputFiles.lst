@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/DemoApplication.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/ApplianceController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/AuthController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/UserController.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/Appliance.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/User.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/UserCredentials.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/ApplianceRepository.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/UserRepository.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/ApplianceService.java
+/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/UserService.java
+=======
+>>>>>>> 2276b0dce018e40f59a7cf3523ccfabf6dd5df1b
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\controller\ApplianceController.java
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\controller\AuthController.java
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\controller\UserController.java
@@ -9,3 +25,7 @@ C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backe
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\repository\UserRepository.java
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\service\ApplianceService.java
 C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook - Copy\backend\src\main\java\com\example\demo\service\UserService.java
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 2276b0dce018e40f59a7cf3523ccfabf6dd5df1b

@@ -1,4 +1,13 @@
 {
+<<<<<<< HEAD
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.compile.nullAnalysis.mode": "automatic"
+=======
+<<<<<<< Updated upstream
+    "java.configuration.updateBuildConfiguration": "interactive"
+=======
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic"
+>>>>>>> Stashed changes
+>>>>>>> 2276b0dce018e40f59a7cf3523ccfabf6dd5df1b
 }

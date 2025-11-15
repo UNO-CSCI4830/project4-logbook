@@ -1,5 +1,16 @@
+<<<<<<< Updated upstream
+com/example/demo/DemoApplication.class
+com/example/demo/service/ApplianceService.class
+com/example/demo/repository/ApplianceRepository.class
+com/example/demo/controller/ApplianceController.class
+com/example/demo/model/Appliance.class
+=======
 com\example\demo\DemoApplication.class
 com\example\demo\model\Appliance.class
 com\example\demo\controller\ApplianceController.class
 com\example\demo\repository\ApplianceRepository.class
 com\example\demo\service\ApplianceService.class
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 2276b0dce018e40f59a7cf3523ccfabf6dd5df1b
