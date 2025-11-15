@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-
 import com.example.demo.model.UserCredentials;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.model.User;
@@ -31,4 +30,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+     @PostMapping("/forgot")
+    public ResponseEntity<String> forgotPassword(@RequestBody UserCredentials creds) {
+        User user = userRepository.findByEmail(creds.getEmail());
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No email was found");
+        } 
+        user.setPassword(creds.getPassword());
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Password updated.");
+
+    }
+
 }

@@ -1,15 +1,23 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class UserService {
+
   private final UserRepository userRepository;
+
+  public UserService(com.example.demo.repository.UserRepository userRepository) {
+      this.userRepository = userRepository;
+  }
 
   public List<User> getAllUsers() {
     return userRepository.findAll();

@@ -2,6 +2,7 @@ import './LoginPage.css'; // optional styling
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +24,7 @@ function LoginPage() {
     }
 };
 
+;
 
     return (
         <div className="login-container">
@@ -38,8 +40,17 @@ function LoginPage() {
                 <input type="password" placeholder="Password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 <button type="submit" className="go-button">Go!</button>
             </form>
+
+            <div className="forgot-password">
+            <button type="button" onClick={() => navigate("/forgot")}>
+              Forgot Password?
+            </button>
+            </div>
         </div>
+        
     );
 }
+
+
 
 export default LoginPage;

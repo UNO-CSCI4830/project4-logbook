@@ -42,3 +42,9 @@
 .go-button:hover {
   background-color: #0056b3;
 }
+
+.forgot-password{
+  padding-top: 20px;
+  font-family: 'sans-serif';
+  font-size: 20px;
+}
