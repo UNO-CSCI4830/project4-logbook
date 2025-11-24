@@ -1,13 +1,15 @@
+'use client'
+
 import './LoginPage.css'; // optional styling
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 
-function LoginPage() {
+const LoginPage = () => {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     
     const response = await fetch('http://localhost:8080/login', {
@@ -17,7 +19,7 @@ function LoginPage() {
     });
 
     if (response.ok) {
-      navigate("/example");
+      router.push('/user');
     } else {
       alert("Invalid credentials");
     }

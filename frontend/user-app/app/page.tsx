@@ -7,7 +7,8 @@ const Homepage = () => {
 
   useEffect(() => {
     // Redirect to dashboard
-    router.push('/user');
+    // edit from Ashley: changed this to login so it appears first
+    router.push('/login');
   }, [router]);
 
   return (
