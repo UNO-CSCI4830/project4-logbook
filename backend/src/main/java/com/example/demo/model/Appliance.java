@@ -34,7 +34,25 @@ public class Appliance {
     private String description;
 
     @Column(nullable=true)
-    private Date alertDate;
+    private String brand;
+
+    @Column(nullable=true)
+    private String model;
+
+    @Column(nullable=true)
+    private String serialNumber;
+
+    @Column(nullable=true)
+    private String notes;
+
+    @Column(nullable=true)
+    private Date purchaseDate;
+
+    @Column(nullable=true)
+    private Date warrantyEndDate;
+
+    @Column(nullable=true)
+    private Integer warrantyMonths;
 
     @Column(nullable = false)
     private Long userId;
