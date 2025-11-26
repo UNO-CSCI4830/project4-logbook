@@ -40,6 +40,12 @@ const LoginPage = () => {
                 <input type="password" placeholder="Password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 <button type="submit" className="go-button">Go!</button>
             </form>
+
+            <div className="forgot-password">
+            <button type="button" onClick={() => router.push('/forgot')}>
+              Forgot Password?
+            </button>
+            </div>
         </div>
     );
 }
