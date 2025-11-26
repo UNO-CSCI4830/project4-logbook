@@ -1,3 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.jdt.ls.vmargs": "-javaagent:C:/Users/akin7/.m2/repository/org/projectlombok/lombok/1.18.30/lombok.jar"
+
 }
