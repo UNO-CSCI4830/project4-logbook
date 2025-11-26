@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -23,6 +24,9 @@ import lombok.Setter;
 @Builder
 public class Appliance {
 
+    public Appliance(long par, String oven, String ge_Profile, LocalDate now, long par1) {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // important for SQLite
     private Long id;
@@ -34,7 +38,7 @@ public class Appliance {
     private String description;
 
     @Column(nullable=true)
-    private Date alertDate;
+    private LocalDate alertDate;
 
     @Column(nullable = false)
     private Long userId;
