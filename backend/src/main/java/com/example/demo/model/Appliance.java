@@ -24,9 +24,6 @@ import lombok.Setter;
 @Builder
 public class Appliance {
 
-    public Appliance(long par, String oven, String ge_Profile, LocalDate now, long par1) {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // important for SQLite
     private Long id;
