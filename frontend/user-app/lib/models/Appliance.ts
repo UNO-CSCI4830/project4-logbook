@@ -13,7 +13,7 @@ export class Appliance extends Entity<number> {
   alertDate?: string;      // yyyy-mm-dd
 
   /** Setters for appliance properties */
- setName(name: string): void {
+  setName(name: string): void {
     this.name = name;
   }
 
