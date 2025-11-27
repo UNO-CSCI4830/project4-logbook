@@ -126,9 +126,18 @@ export function ApplianceForm({ initial, onSubmit }: ApplianceFormProps) {
                         onChange={e => set('conditionText', e.target.value)}
                         className={inputClass}
                     />
-                </div> 
+                </div>
 
-
+                <div>
+                    <label htmlFor="alertDate" className={labelClass}>Maintenance Alert Date</label>
+                    <input
+                        type="date"
+                        id="alertDate"
+                        value={form.alertDate ?? ''}
+                        onChange={e => set('alertDate', e.target.value)}
+                        className={inputClass}
+                    />
+                </div>
 
                 <div className="md:col-span-2">
                     <label htmlFor="notes" className={labelClass}>Notes</label>
