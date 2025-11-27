@@ -10,6 +10,7 @@ export class Appliance extends Entity<number> {
   warrantyMonths?: number;
   conditionText?: string;
   notes?: string;
+  alertDate?: string;      // yyyy-mm-dd
 
   /** Setters for appliance properties */
  setName(name: string): void {
@@ -48,6 +49,10 @@ export class Appliance extends Entity<number> {
     this.notes = notes;
   }
 
+  setAlertDate(alertDate: string): void {
+    this.alertDate = alertDate;
+  }
+
   /** name required, warrantyMonths ≥ 0, date */
   override validate(): string[] {
     const errs: string[] = [];
@@ -62,7 +67,8 @@ export class Appliance extends Entity<number> {
   override toPayload() {
     const raw = { id: this.id, name: this.name, category: this.category, brand: this.brand,
       model: this.model, serialNumber: this.serialNumber, purchaseDate: this.purchaseDate,
-      warrantyMonths: this.warrantyMonths, conditionText: this.conditionText, notes: this.notes };
+      warrantyMonths: this.warrantyMonths, conditionText: this.conditionText, notes: this.notes,
+      alertDate: this.alertDate };
     Object.keys(raw).forEach(k => (raw as any)[k] === '' && delete (raw as any)[k]);
     return raw;
   }
