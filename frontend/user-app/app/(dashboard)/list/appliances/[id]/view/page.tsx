@@ -93,6 +93,16 @@ export default function ViewAppliancePage() {
                     <div className={valueClass}>{appliance.conditionText || '—'}</div>
                 </div>
 
+                <div className={fieldClass}>
+                    <label className={labelClass}>Maintenance Alert Date</label>
+                    <div className={valueClass}>
+                        {appliance.alertDate
+                            ? new Date(appliance.alertDate).toLocaleDateString()
+                            : '—'
+                        }
+                    </div>
+                </div>
+
                 <div className={`${fieldClass} md:col-span-2`}>
                     <label className={labelClass}>Notes</label>
                     <div className={valueClass} style={{ whiteSpace: 'pre-wrap' }}>
