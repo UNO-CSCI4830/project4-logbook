@@ -19,6 +19,13 @@ const LoginPage = () => {
     });
 
     if (response.ok) {
+      // Read the token from the response body
+      const token = await response.text(); // backend returns plain string JWT
+
+      // Store it in localStorage
+      localStorage.setItem("authToken", token);
+
+      // Redirect to dashboard
       router.push('/user');
     } else {
       alert("Invalid credentials");
