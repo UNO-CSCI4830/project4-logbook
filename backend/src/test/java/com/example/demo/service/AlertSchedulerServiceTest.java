@@ -3,8 +3,8 @@ package com.example.demo.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,11 +50,11 @@ class AlertSchedulerServiceTest {
             .id(1L)
             .name("Test Refrigerator")
             .description("Needs maintenance")
-            .alertDate(new Date())
+            .alertDate(LocalDate.now())
             .userId(1L)
             .build();
 
-        when(applianceRepository.findByAlertDate(any(Date.class)))
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
             .thenReturn(Arrays.asList(testAppliance));
         when(userRepository.findById(1L))
             .thenReturn(Optional.of(testUser));
@@ -63,7 +63,7 @@ class AlertSchedulerServiceTest {
         alertSchedulerService.checkAndSendAlerts();
 
         // Assert
-        verify(applianceRepository, times(1)).findByAlertDate(any(Date.class));
+        verify(applianceRepository, times(1)).findByAlertDateBefore(any(LocalDate.class));
         verify(userRepository, times(1)).findById(1L);
         verify(emailService, times(1)).sendMaintenanceAlert(testUser, testAppliance);
     }
@@ -71,14 +71,14 @@ class AlertSchedulerServiceTest {
     @Test
     void testCheckAndSendAlerts_NoAlerts() {
         // Arrange
-        when(applianceRepository.findByAlertDate(any(Date.class)))
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
             .thenReturn(Arrays.asList());
 
         // Act
         alertSchedulerService.checkAndSendAlerts();
 
         // Assert
-        verify(applianceRepository, times(1)).findByAlertDate(any(Date.class));
+        verify(applianceRepository, times(1)).findByAlertDateBefore(any(LocalDate.class));
         verify(emailService, never()).sendMaintenanceAlert(any(), any());
     }
 
@@ -91,7 +91,7 @@ class AlertSchedulerServiceTest {
             .userId(999L)
             .build();
 
-        when(applianceRepository.findByAlertDate(any(Date.class)))
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
             .thenReturn(Arrays.asList(testAppliance));
         when(userRepository.findById(999L))
             .thenReturn(Optional.empty());
@@ -122,7 +122,7 @@ class AlertSchedulerServiceTest {
             .id(1L)
             .name("Refrigerator")
             .description("Fridge maintenance")
-            .alertDate(new Date())
+            .alertDate(LocalDate.now())
             .userId(1L)
             .build();
 
@@ -130,7 +130,7 @@ class AlertSchedulerServiceTest {
             .id(2L)
             .name("Dishwasher")
             .description("Dishwasher maintenance")
-            .alertDate(new Date())
+            .alertDate(LocalDate.now())
             .userId(2L)
             .build();
 
@@ -138,11 +138,11 @@ class AlertSchedulerServiceTest {
             .id(3L)
             .name("Oven")
             .description("Oven maintenance")
-            .alertDate(new Date())
+            .alertDate(LocalDate.now())
             .userId(1L)
             .build();
 
-        when(applianceRepository.findByAlertDate(any(Date.class)))
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
             .thenReturn(Arrays.asList(appliance1, appliance2, appliance3));
         when(userRepository.findById(1L))
             .thenReturn(Optional.of(user1));
@@ -153,7 +153,7 @@ class AlertSchedulerServiceTest {
         alertSchedulerService.checkAndSendAlerts();
 
         // Assert
-        verify(applianceRepository, times(1)).findByAlertDate(any(Date.class));
+        verify(applianceRepository, times(1)).findByAlertDateBefore(any(LocalDate.class));
         verify(userRepository, times(2)).findById(1L); // User 1 has 2 appliances
         verify(userRepository, times(1)).findById(2L); // User 2 has 1 appliance
         verify(emailService, times(1)).sendMaintenanceAlert(user1, appliance1);
@@ -183,7 +183,7 @@ class AlertSchedulerServiceTest {
             .userId(999L)
             .build();
 
-        when(applianceRepository.findByAlertDate(any(Date.class)))
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
             .thenReturn(Arrays.asList(validAppliance, orphanedAppliance));
         when(userRepository.findById(1L))
             .thenReturn(Optional.of(validUser));
