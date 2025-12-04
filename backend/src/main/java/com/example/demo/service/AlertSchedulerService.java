@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -32,10 +32,10 @@ public class AlertSchedulerService {
     @Scheduled(cron = "0 0 9 * * *")
     public void checkAndSendAlerts() {
         log.info("Running scheduled alert check");
-        Date today = new Date();
-        List<Appliance> alertsDue = applianceRepository.findByAlertDate(today);
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        List<Appliance> alertsDue = applianceRepository.findByAlertDateBefore(tomorrow);
 
-        log.info("Found {} appliances with alerts due today", alertsDue.size());
+        log.info("Found {} appliances with alerts due today or earlier", alertsDue.size());
 
         for (Appliance appliance : alertsDue) {
             userRepository.findById(appliance.getUserId()).ifPresentOrElse(

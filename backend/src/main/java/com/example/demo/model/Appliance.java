@@ -55,7 +55,7 @@ public class Appliance {
     @Column(nullable=true)
     private String notes;
 
-    @Column(nullable=true)
+    @Column(nullable=true, columnDefinition = "DATE")
     private LocalDate alertDate;
 
     @Column(nullable = false)

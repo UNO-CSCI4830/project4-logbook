@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Appliance;
 import com.example.demo.repository.ApplianceRepository;
 import com.example.demo.service.ApplianceService;
+import com.example.demo.service.AlertSchedulerService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -28,10 +29,12 @@ import com.example.demo.service.ApplianceService;
 public class ApplianceController {
     private final ApplianceService applianceService;
     private final ApplianceRepository applianceRepository;
+    private final AlertSchedulerService alertSchedulerService;
 
-    public ApplianceController(ApplianceService applianceService, ApplianceRepository applianceRepository) {
+    public ApplianceController(ApplianceService applianceService, ApplianceRepository applianceRepository, AlertSchedulerService alertSchedulerService) {
         this.applianceService = applianceService;
         this.applianceRepository = applianceRepository;
+        this.alertSchedulerService = alertSchedulerService;
     }
 
     @GetMapping
@@ -163,5 +166,11 @@ public class ApplianceController {
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(alertAppliances);
+    }
+
+    @PostMapping("/trigger-alerts")
+    public ResponseEntity<String> triggerAlerts() {
+        alertSchedulerService.checkAndSendAlerts();
+        return ResponseEntity.ok("Alert check triggered manually. Check logs for results.");
     }
 }
