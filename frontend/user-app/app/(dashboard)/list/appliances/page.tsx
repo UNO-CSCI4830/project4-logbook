@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
 import Table from '@/components/Table';
@@ -7,15 +7,19 @@ import TableSearch from '@/components/TableSearch';
 import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from "@/components/Pagination";
-import { ApplianceData } from '@/lib/data';
+import { useToast } from '@/contexts/ToastContext';
+import { ApiClient } from '@/lib/services/ApiClient';
 
 const service = new ApplianceService();
+const api = new ApiClient();
 
 export default function AppliancesPage() {
     const [items, setItems] = useState<Appliance[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleteing, setDeleteing] = useState<number | null>(null);
     const [error, setError] = useState<string>();
+    const { showToast } = useToast();
+    const alertsChecked = useRef(false);
 
     async function refresh() {
         try {
@@ -28,8 +32,31 @@ export default function AppliancesPage() {
         }
     }
 
+    async function checkAlerts() {
+        if (alertsChecked.current) return; // Prevent duplicate calls
+        alertsChecked.current = true;
+
+        try {
+            const userId = 1; // Hardcoded for now
+            const response = await api.http.get(`/api/${userId}/appliances/alerts`);
+            const alertAppliances = response.data;
+
+            if (alertAppliances.length > 0) {
+                const applianceNames = alertAppliances.map((a: any) => a.name).join(', ');
+                const message = alertAppliances.length === 1
+                    ? `Maintenance alert: ${applianceNames} is due for service!`
+                    : `Maintenance alerts: ${applianceNames} are due for service!`;
+
+                showToast(message, 'warning', 10000);
+            }
+        } catch (error: any) {
+            console.error('Failed to check alerts:', error);
+        }
+    }
+
     useEffect(() => {
         refresh();
+        checkAlerts();
     }, []);
 
     async function onDelete(id?: number) {
@@ -51,12 +78,8 @@ export default function AppliancesPage() {
         { header: "Brand", accessor: "brand" },
         { header: "Model", accessor: "model" },
         { header: "Category", accessor: "category" },
-      /*{ header: "Serial Number", accessor: "serialNumber" },
-        { header: "Purchase Date", accessor: "purchaseDate" },
-        { header: "Warranty", accessor: "warrantyMonths" },
-        { header: "Condition", accessor: "conditionText" },
-        { header: "Notes", accessor: "notes", className: "p-4"},
-        { header: "Actions", accessor: "actions", className: "" }, */
+        { header: "Alert Date", accessor: "alertDate" },
+        { header: "Actions", accessor: "actions", className: "" },
     ];
 
     const renderRow = (appliance: Appliance) => (
@@ -69,6 +92,11 @@ export default function AppliancesPage() {
             <td className="p-4">{appliance.brand || '—'}</td>
             <td className="p-4">{appliance.model || '—'}</td>
             <td className="p-4">{appliance.category || '—'}</td>
+            <td className="p-4">
+                {appliance.alertDate
+                    ? new Date(appliance.alertDate + 'T00:00:00').toLocaleDateString()
+                    : '—'}
+            </td>
             <td className="p-4 text-right">
                 <div className="flex items-center gap-2">
                     <Link href={`/list/appliances/${appliance.id}/edit`}>
@@ -76,7 +104,7 @@ export default function AppliancesPage() {
                             <Image src="/edit.png" alt="" width={14} height={14} />
                         </button>
                     </Link>
-                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-yellow-500 hover:bg-gray-200" onClick={() => onDelete(appliance.id)} 
+                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-yellow-500 hover:bg-gray-200" onClick={() => onDelete(appliance.id)}
                     disabled={deleteing === appliance.id}>
                         {deleteing === appliance.id ? (
                             <span className="text-xs">...</span>
@@ -127,7 +155,6 @@ export default function AppliancesPage() {
             )}
 
             {!loading && !error && <Table columns={columns} renderRow={renderRow} data={items} />}
-                <Table columns={columns} renderRow={renderRow} data={ApplianceData} />
             {/* PAGINATION */}
             <Pagination />
         </section>

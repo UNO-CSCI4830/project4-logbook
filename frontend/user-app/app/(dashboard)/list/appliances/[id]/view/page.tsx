@@ -71,8 +71,8 @@ export default function ViewAppliancePage() {
                 <div className={fieldClass}>
                     <label className={labelClass}>Purchase Date</label>
                     <div className={valueClass}>
-                        {appliance.purchaseDate 
-                            ? new Date(appliance.purchaseDate).toLocaleDateString() 
+                        {appliance.purchaseDate
+                            ? new Date(appliance.purchaseDate + 'T00:00:00').toLocaleDateString()
                             : '—'
                         }
                     </div>
@@ -97,7 +97,7 @@ export default function ViewAppliancePage() {
                     <label className={labelClass}>Maintenance Alert Date</label>
                     <div className={valueClass}>
                         {appliance.alertDate
-                            ? new Date(appliance.alertDate).toLocaleDateString()
+                            ? new Date(appliance.alertDate + 'T00:00:00').toLocaleDateString()
                             : '—'
                         }
                     </div>
