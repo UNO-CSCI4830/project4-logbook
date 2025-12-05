@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,21 +10,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name ="appliances")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Appliance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // important for SQLite
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -34,9 +32,32 @@ public class Appliance {
     private String description;
 
     @Column(nullable=true)
-    private Date alertDate;
+    private String category;
+
+    @Column(nullable=true)
+    private String brand;
+
+    @Column(nullable=true)
+    private String model;
+
+    @Column(nullable=true)
+    private String serialNumber;
+
+    @Column(nullable=true)
+    private String purchaseDate;
+
+    @Column(nullable=true)
+    private Integer warrantyMonths;
+
+    @Column(nullable=true)
+    private String conditionText;
+
+    @Column(nullable=true)
+    private String notes;
+
+    @Column(nullable=true, columnDefinition = "DATE")
+    private LocalDate alertDate;
 
     @Column(nullable = false)
     private Long userId;
-    
 }

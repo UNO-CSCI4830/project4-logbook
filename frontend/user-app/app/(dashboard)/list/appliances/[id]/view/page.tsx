@@ -71,8 +71,8 @@ export default function ViewAppliancePage() {
                 <div className={fieldClass}>
                     <label className={labelClass}>Purchase Date</label>
                     <div className={valueClass}>
-                        {appliance.purchaseDate 
-                            ? new Date(appliance.purchaseDate).toLocaleDateString() 
+                        {appliance.purchaseDate
+                            ? new Date(appliance.purchaseDate + 'T00:00:00').toLocaleDateString()
                             : '—'
                         }
                     </div>
@@ -91,6 +91,16 @@ export default function ViewAppliancePage() {
                 <div className={fieldClass}>
                     <label className={labelClass}>Condition</label>
                     <div className={valueClass}>{appliance.conditionText || '—'}</div>
+                </div>
+
+                <div className={fieldClass}>
+                    <label className={labelClass}>Maintenance Alert Date</label>
+                    <div className={valueClass}>
+                        {appliance.alertDate
+                            ? new Date(appliance.alertDate + 'T00:00:00').toLocaleDateString()
+                            : '—'
+                        }
+                    </div>
                 </div>
 
                 <div className={`${fieldClass} md:col-span-2`}>

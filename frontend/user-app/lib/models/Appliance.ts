@@ -10,9 +10,46 @@ export class Appliance extends Entity<number> {
   warrantyMonths?: number;
   conditionText?: string;
   notes?: string;
+  alertDate?: string;      // yyyy-mm-dd
+
+  /** Override fromJSON to handle date conversion from backend */
+  static fromJSON(json: any): Appliance {
+    const instance = new Appliance();
+    Object.assign(instance, json);
+
+    // Convert Date objects or timestamps to yyyy-mm-dd strings
+    if (json.alertDate) {
+      instance.alertDate = this.toDateString(json.alertDate);
+    }
+    if (json.purchaseDate) {
+      instance.purchaseDate = this.toDateString(json.purchaseDate);
+    }
+
+    return instance;
+  }
+
+  /** Convert Date object or timestamp to yyyy-mm-dd string */
+  private static toDateString(value: any): string {
+    // LocalDate from backend comes as simple string "yyyy-mm-dd"
+    if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return value;
+    }
+
+    // Handle any other format (legacy Date objects, ISO strings, etc.)
+    if (typeof value === 'string' && value.includes('T')) {
+      return value.split('T')[0];
+    }
+
+    // Fallback for Date objects
+    const date = new Date(value);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   /** Setters for appliance properties */
- setName(name: string): void {
+  setName(name: string): void {
     this.name = name;
   }
 
@@ -48,6 +85,10 @@ export class Appliance extends Entity<number> {
     this.notes = notes;
   }
 
+  setAlertDate(alertDate: string): void {
+    this.alertDate = alertDate;
+  }
+
   /** name required, warrantyMonths ≥ 0, date */
   override validate(): string[] {
     const errs: string[] = [];
@@ -60,10 +101,21 @@ export class Appliance extends Entity<number> {
 
   /** Example: strip empty strings before sending */
   override toPayload() {
-    const raw = { id: this.id, name: this.name, category: this.category, brand: this.brand,
-      model: this.model, serialNumber: this.serialNumber, purchaseDate: this.purchaseDate,
-      warrantyMonths: this.warrantyMonths, conditionText: this.conditionText, notes: this.notes };
-    Object.keys(raw).forEach(k => (raw as any)[k] === '' && delete (raw as any)[k]);
+    const raw: any = {
+      id: this.id,
+      name: this.name,
+      category: this.category,
+      brand: this.brand,
+      model: this.model,
+      serialNumber: this.serialNumber,
+      purchaseDate: this.purchaseDate,
+      warrantyMonths: this.warrantyMonths,
+      conditionText: this.conditionText,
+      notes: this.notes,
+      alertDate: this.alertDate
+    };
+
+    Object.keys(raw).forEach(k => raw[k] === '' && delete raw[k]);
     return raw;
   }
 
