@@ -11,6 +11,10 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+      if (!email || !password) {
+        alert('Please enter email and password');
+        return;
+      }
     
     const response = await fetch('http://localhost:8080/login', {
       method: 'POST',
