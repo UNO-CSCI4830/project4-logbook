@@ -38,6 +38,27 @@ public class AlertSchedulerService {
         log.info("Found {} appliances with alerts due today or earlier", alertsDue.size());
 
         for (Appliance appliance : alertsDue) {
+            // Skip if alert is cancelled
+            if ("CANCELLED".equals(appliance.getAlertStatus())) {
+                log.info("Skipping cancelled alert for appliance {}", appliance.getName());
+                continue;
+            }
+
+            // Skip if alert is snoozed and snooze period hasn't ended
+            if ("SNOOZED".equals(appliance.getAlertStatus()) && appliance.getSnoozeUntil() != null) {
+                if (LocalDate.now().isBefore(appliance.getSnoozeUntil())) {
+                    log.info("Skipping snoozed alert for appliance {} (snoozed until {})",
+                            appliance.getName(), appliance.getSnoozeUntil());
+                    continue;
+                } else {
+                    // Snooze period ended, reactivate alert
+                    appliance.setAlertStatus("ACTIVE");
+                    appliance.setSnoozeUntil(null);
+                    applianceRepository.save(appliance);
+                    log.info("Reactivated alert for appliance {} (snooze period ended)", appliance.getName());
+                }
+            }
+
             userRepository.findById(appliance.getUserId()).ifPresentOrElse(
                 user -> {
                     emailService.sendMaintenanceAlert(user, appliance);
