@@ -11,6 +11,10 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+      if (!email || !password) {
+        alert('Please enter email and password');
+        return;
+      }
     
     const response = await fetch('http://localhost:8080/login', {
       method: 'POST',
@@ -19,6 +23,13 @@ const LoginPage = () => {
     });
 
     if (response.ok) {
+      // Read the token from the response body
+      const token = await response.text(); // backend returns plain string JWT
+
+      // Store it in localStorage
+      localStorage.setItem("authToken", token);
+
+      // Redirect to dashboard
       router.push('/user');
     } else {
       alert("Invalid credentials");
