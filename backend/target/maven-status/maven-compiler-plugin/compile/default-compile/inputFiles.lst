@@ -1,11 +1,13 @@
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/DemoApplication.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/ApplianceController.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/AuthController.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/controller/UserController.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/Appliance.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/User.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/model/UserCredentials.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/ApplianceRepository.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/repository/UserRepository.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/ApplianceService.java
-/Users/keerthisudha/development/project4-logbook/backend/src/main/java/com/example/demo/service/UserService.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\controller\ApplianceController.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\controller\AuthController.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\controller\UserController.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\DemoApplication.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\model\Appliance.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\model\User.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\model\UserCredentials.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\repository\ApplianceRepository.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\repository\UserRepository.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\service\AlertSchedulerService.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\service\ApplianceService.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\service\EmailService.java
+C:\Users\wjryd\Documents\School\CSCI 4630\Git Fill\project4-logbook\backend\src\main\java\com\example\demo\service\UserService.java
