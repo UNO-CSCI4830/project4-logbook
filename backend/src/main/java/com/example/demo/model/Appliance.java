@@ -58,6 +58,12 @@ public class Appliance {
     @Column(nullable=true, columnDefinition = "DATE")
     private LocalDate alertDate;
 
+    @Column(nullable=true)
+    private String alertStatus; // ACTIVE, SNOOZED, CANCELLED
+
+    @Column(nullable=true, columnDefinition = "DATE")
+    private LocalDate snoozeUntil;
+
     @Column(nullable = false)
     private Long userId;
 }

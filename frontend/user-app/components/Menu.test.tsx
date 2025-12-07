@@ -28,7 +28,7 @@ describe("Menu", () => {
 
     // these labels come from your array
     expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("Applicances")).toBeInTheDocument(); // spelled like your component
+    expect(screen.getByText("Appliances")).toBeInTheDocument();
     expect(screen.getByText("About")).toBeInTheDocument();
     expect(screen.getByText("Profile")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();

@@ -42,12 +42,27 @@ export default function AppliancesPage() {
             const alertAppliances = response.data;
 
             if (alertAppliances.length > 0) {
-                const applianceNames = alertAppliances.map((a: any) => a.name).join(', ');
-                const message = alertAppliances.length === 1
-                    ? `Maintenance alert: ${applianceNames} is due for service!`
-                    : `Maintenance alerts: ${applianceNames} are due for service!`;
+                // Get the list of alert IDs we've already shown today
+                const today = new Date().toDateString();
+                const shownAlertsKey = `shownAlerts_${today}`;
+                const shownAlertsJson = localStorage.getItem(shownAlertsKey);
+                const shownAlertIds = shownAlertsJson ? JSON.parse(shownAlertsJson) : [];
 
-                showToast(message, 'warning', 10000);
+                // Filter to only new alerts we haven't shown yet today
+                const newAlerts = alertAppliances.filter((a: any) => !shownAlertIds.includes(a.id));
+
+                if (newAlerts.length > 0) {
+                    const applianceNames = newAlerts.map((a: any) => a.name).join(', ');
+                    const message = newAlerts.length === 1
+                        ? `Maintenance alert: ${applianceNames} is due for service!`
+                        : `Maintenance alerts: ${applianceNames} are due for service!`;
+
+                    showToast(message, 'warning', 10000);
+
+                    // Mark these alerts as shown
+                    const updatedShownIds = [...shownAlertIds, ...newAlerts.map((a: any) => a.id)];
+                    localStorage.setItem(shownAlertsKey, JSON.stringify(updatedShownIds));
+                }
             }
         } catch (error: any) {
             console.error('Failed to check alerts:', error);
@@ -79,25 +94,53 @@ export default function AppliancesPage() {
         { header: "Model", accessor: "model" },
         { header: "Category", accessor: "category" },
         { header: "Alert Date", accessor: "alertDate" },
+        { header: "Status", accessor: "status" },
         { header: "Actions", accessor: "actions", className: "" },
     ];
 
+    const getStatusBadge = (appliance: Appliance) => {
+        if (!appliance.alertDate) return null;
+
+        const status = appliance.alertStatus || 'ACTIVE';
+        const colors = {
+            ACTIVE: 'bg-green-100 text-green-800',
+            SNOOZED: 'bg-yellow-100 text-yellow-800',
+            CANCELLED: 'bg-gray-100 text-gray-800'
+        };
+
+        return (
+            <div className="flex flex-col gap-1">
+                <span className={`px-2 py-1 rounded text-sm font-medium w-fit ${colors[status as keyof typeof colors]}`}>
+                    {status}
+                </span>
+                {status === 'SNOOZED' && appliance.snoozeUntil && (
+                    <span className="text-xs text-gray-600">
+                        until {new Date(appliance.snoozeUntil + 'T00:00:00').toLocaleDateString()}
+                    </span>
+                )}
+            </div>
+        );
+    };
+
     const renderRow = (appliance: Appliance) => (
         <tr key={appliance.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-purple-300">
-            <td className="flex items-center gap-4 p-4">
+            <td className="p-4 align-middle">
                 <Link href={`/list/appliances/${appliance.id}/view`} className="font-bold hover:underline">
                     {appliance.name}
                 </Link>
             </td>
-            <td className="p-4">{appliance.brand || '—'}</td>
-            <td className="p-4">{appliance.model || '—'}</td>
-            <td className="p-4">{appliance.category || '—'}</td>
-            <td className="p-4">
+            <td className="p-4 align-middle">{appliance.brand || '—'}</td>
+            <td className="p-4 align-middle">{appliance.model || '—'}</td>
+            <td className="p-4 align-middle">{appliance.category || '—'}</td>
+            <td className="p-4 align-middle">
                 {appliance.alertDate
                     ? new Date(appliance.alertDate + 'T00:00:00').toLocaleDateString()
                     : '—'}
             </td>
-            <td className="p-4 text-right">
+            <td className="p-4 align-middle">
+                {getStatusBadge(appliance) || '—'}
+            </td>
+            <td className="p-4 align-middle text-right">
                 <div className="flex items-center gap-2">
                     <Link href={`/list/appliances/${appliance.id}/edit`}>
                         <button className="w-7 h-7 flex items-center justify-center rounded-full bg-purple-300 hover:bg-gray-200">

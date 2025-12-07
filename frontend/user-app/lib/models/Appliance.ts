@@ -11,6 +11,8 @@ export class Appliance extends Entity<number> {
   conditionText?: string;
   notes?: string;
   alertDate?: string;      // yyyy-mm-dd
+  alertStatus?: string;    // ACTIVE, SNOOZED, CANCELLED
+  snoozeUntil?: string;    // yyyy-mm-dd
 
   /** Override fromJSON to handle date conversion from backend */
   static fromJSON(json: any): Appliance {

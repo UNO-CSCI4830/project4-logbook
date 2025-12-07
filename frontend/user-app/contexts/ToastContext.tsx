@@ -19,7 +19,7 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const showToast = useCallback((message: string, type: ToastType = 'info', duration = 5000) => {
+  const showToast = useCallback((message: string, type: ToastType = 'info', duration = 2000) => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type, duration }]);
   }, []);
@@ -31,7 +31,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2">
         {toasts.map((toast) => (
           <Toast
             key={toast.id}

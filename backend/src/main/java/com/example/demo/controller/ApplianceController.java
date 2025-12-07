@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Appliance;
@@ -71,6 +72,13 @@ public class ApplianceController {
         }
 
         Appliance appliance = optionalAppliance.get();
+
+        // Track if alert date is changing
+        LocalDate oldAlertDate = appliance.getAlertDate();
+        LocalDate newAlertDate = applianceDetails.getAlertDate();
+        boolean alertDateChanged = (oldAlertDate == null && newAlertDate != null) ||
+                                   (oldAlertDate != null && !oldAlertDate.equals(newAlertDate));
+
         appliance.setName(applianceDetails.getName());
         appliance.setDescription(applianceDetails.getDescription());
         appliance.setCategory(applianceDetails.getCategory());
@@ -82,6 +90,12 @@ public class ApplianceController {
         appliance.setConditionText(applianceDetails.getConditionText());
         appliance.setNotes(applianceDetails.getNotes());
         appliance.setAlertDate(applianceDetails.getAlertDate());
+
+        // If alert date changed, reset alert status to ACTIVE and clear snooze
+        if (alertDateChanged) {
+            appliance.setAlertStatus("ACTIVE");
+            appliance.setSnoozeUntil(null);
+        }
 
         Appliance updated = applianceService.saveAppliance(appliance);
         return ResponseEntity.ok(updated);
@@ -99,6 +113,14 @@ public class ApplianceController {
         }
 
         Appliance appliance = optionalAppliance.get();
+
+        // Track if alert date is changing
+        boolean alertDateChanged = false;
+        if (applianceDetails.getAlertDate() != null) {
+            LocalDate oldAlertDate = appliance.getAlertDate();
+            LocalDate newAlertDate = applianceDetails.getAlertDate();
+            alertDateChanged = (oldAlertDate == null) || !oldAlertDate.equals(newAlertDate);
+        }
 
         if (applianceDetails.getName() != null) {
             appliance.setName(applianceDetails.getName());
@@ -134,6 +156,12 @@ public class ApplianceController {
             appliance.setAlertDate(applianceDetails.getAlertDate());
         }
 
+        // If alert date changed, reset alert status to ACTIVE and clear snooze
+        if (alertDateChanged) {
+            appliance.setAlertStatus("ACTIVE");
+            appliance.setSnoozeUntil(null);
+        }
+
         Appliance updated = applianceService.saveAppliance(appliance);
         return ResponseEntity.ok(updated);
     }
@@ -161,8 +189,17 @@ public class ApplianceController {
         LocalDate today = LocalDate.now();
 
         // Filter appliances with alerts due today or in the past
+        // Exclude CANCELLED alerts and actively SNOOZED alerts
         List<Appliance> alertAppliances = allAppliances.stream()
             .filter(a -> a.getAlertDate() != null && !a.getAlertDate().isAfter(today))
+            .filter(a -> !"CANCELLED".equals(a.getAlertStatus()))
+            .filter(a -> {
+                // Exclude if snoozed and snooze period hasn't ended
+                if ("SNOOZED".equals(a.getAlertStatus()) && a.getSnoozeUntil() != null) {
+                    return !today.isBefore(a.getSnoozeUntil());
+                }
+                return true;
+            })
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(alertAppliances);
@@ -172,5 +209,41 @@ public class ApplianceController {
     public ResponseEntity<String> triggerAlerts() {
         alertSchedulerService.checkAndSendAlerts();
         return ResponseEntity.ok("Alert check triggered manually. Check logs for results.");
+    }
+
+    @PostMapping("/{applianceId}/alert/snooze")
+    public ResponseEntity<Appliance> snoozeAlert(@PathVariable Long userId, @PathVariable Long applianceId, @RequestParam int days) {
+        return applianceRepository.findByUserIdAndId(userId, applianceId)
+            .map(appliance -> {
+                appliance.setAlertStatus("SNOOZED");
+                appliance.setSnoozeUntil(java.time.LocalDate.now().plusDays(days));
+                Appliance updated = applianceRepository.save(appliance);
+                return ResponseEntity.ok(updated);
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{applianceId}/alert/cancel")
+    public ResponseEntity<Appliance> cancelAlert(@PathVariable Long userId, @PathVariable Long applianceId) {
+        return applianceRepository.findByUserIdAndId(userId, applianceId)
+            .map(appliance -> {
+                appliance.setAlertStatus("CANCELLED");
+                appliance.setSnoozeUntil(null);
+                Appliance updated = applianceRepository.save(appliance);
+                return ResponseEntity.ok(updated);
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{applianceId}/alert/reactivate")
+    public ResponseEntity<Appliance> reactivateAlert(@PathVariable Long userId, @PathVariable Long applianceId) {
+        return applianceRepository.findByUserIdAndId(userId, applianceId)
+            .map(appliance -> {
+                appliance.setAlertStatus("ACTIVE");
+                appliance.setSnoozeUntil(null);
+                Appliance updated = applianceRepository.save(appliance);
+                return ResponseEntity.ok(updated);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 }
