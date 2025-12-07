@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Navbar from "@/components/Navbar"; // change to your actual path
+import { AlertProvider } from "@/contexts/AlertContext";
 
 // mock next/image
 jest.mock("next/image", () => {
@@ -18,13 +19,29 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
+// Mock fetch for API calls
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve([]),
+  })
+) as jest.Mock;
+
 describe("Navbar", () => {
   beforeEach(() => {
     push.mockClear();
   });
 
+  const renderWithProvider = () => {
+    return render(
+      <AlertProvider>
+        <Navbar />
+      </AlertProvider>
+    );
+  };
+
   it("renders user info and logout button", () => {
-    render(<Navbar />);
+    renderWithProvider();
 
     // from your component
     expect(screen.getByText("Alan Turing")).toBeInTheDocument();
@@ -33,14 +50,14 @@ describe("Navbar", () => {
   });
 
   it("renders the search input", () => {
-    render(<Navbar />);
+    renderWithProvider();
 
     // input with placeholder
     expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
   });
 
   it("navigates to /login when clicking logout", () => {
-    render(<Navbar />);
+    renderWithProvider();
 
     const logoutBtn = screen.getByRole("button", { name: /logout/i });
     fireEvent.click(logoutBtn);
