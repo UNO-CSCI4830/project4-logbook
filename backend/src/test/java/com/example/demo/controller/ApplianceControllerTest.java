@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,7 @@ import com.example.demo.service.AlertSchedulerService;
 import com.example.demo.service.ApplianceService;
 
 @WebMvcTest(ApplianceController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(classes = DemoApplication.class)
 class ApplianceControllerTest {
 
