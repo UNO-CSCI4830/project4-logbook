@@ -4,12 +4,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
 import { ApplianceForm } from '../../shared/ApplianceForm';
+import { useAlertRefresh } from '@/contexts/AlertContext';
 
 const service = new ApplianceService();
 
 export default function EditAppliancePage() {
     const id = Number(useParams()?.id);
     const router = useRouter();
+    const { triggerRefresh } = useAlertRefresh();
     const [initial, setInitial] = useState<Appliance | null>(null);
 
     useEffect(() => {
@@ -18,6 +20,7 @@ export default function EditAppliancePage() {
 
     async function onSubmit(patch: Appliance) {
         await service.update(id, patch);
+        triggerRefresh(); // Update navbar alert count
         router.push(`/list/appliances/${id}/view`);
     }
 
