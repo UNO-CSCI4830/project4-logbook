@@ -63,11 +63,50 @@ public class AlertSchedulerService {
                 user -> {
                     emailService.sendMaintenanceAlert(user, appliance);
                     log.info("Sent alert for appliance {} to user {}", appliance.getName(), user.getEmail());
+
+                    // Handle recurring alerts
+                    handleRecurringAlert(appliance);
                 },
                 () -> log.warn("User not found for appliance {} (userId: {})", appliance.getName(), appliance.getUserId())
             );
         }
 
         log.info("Completed scheduled alert check");
+    }
+
+    private void handleRecurringAlert(Appliance appliance) {
+        String interval = appliance.getRecurringInterval();
+
+        // Skip if not recurring or interval is NONE
+        if (interval == null || "NONE".equals(interval)) {
+            return;
+        }
+
+        LocalDate currentAlertDate = appliance.getAlertDate();
+        LocalDate nextAlertDate = null;
+
+        switch (interval) {
+            case "MONTHLY":
+                nextAlertDate = currentAlertDate.plusMonths(1);
+                break;
+            case "YEARLY":
+                nextAlertDate = currentAlertDate.plusYears(1);
+                break;
+            case "CUSTOM":
+                Integer days = appliance.getRecurringIntervalDays();
+                if (days != null && days > 0) {
+                    nextAlertDate = currentAlertDate.plusDays(days);
+                }
+                break;
+        }
+
+        if (nextAlertDate != null) {
+            appliance.setAlertDate(nextAlertDate);
+            appliance.setAlertStatus("ACTIVE");
+            appliance.setSnoozeUntil(null);
+            applianceRepository.save(appliance);
+            log.info("Scheduled next recurring alert for appliance {} on {}",
+                    appliance.getName(), nextAlertDate);
+        }
     }
 }

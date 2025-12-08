@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
@@ -11,7 +11,6 @@ const service = new ApplianceService();
 
 export default function ViewAppliancePage() {
     const id = Number(useParams()?.id);
-    const router = useRouter();
     const { showToast } = useToast();
     const { triggerRefresh } = useAlertRefresh();
     const [appliance, setAppliance] = useState<Appliance | null>(null);
@@ -21,8 +20,13 @@ export default function ViewAppliancePage() {
     const [isLoading, setIsLoading] = useState(false);
     const snoozeDropdownRef = useRef<HTMLDivElement>(null);
 
+    // Fetch appliance data - refetch on every mount and when id changes
     useEffect(() => {
-        (async () => setAppliance(await service.get(id)))();
+        (async () => {
+            const data = await service.get(id);
+            setAppliance(data);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     // Close snooze dropdown when clicking outside
@@ -224,6 +228,13 @@ export default function ViewAppliancePage() {
                                     (until {new Date(appliance.snoozeUntil + 'T00:00:00').toLocaleDateString()})
                                 </span>
                             )}
+                            {appliance.recurringInterval && appliance.recurringInterval !== 'NONE' && (
+                                <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                                    🔄 {appliance.recurringInterval === 'CUSTOM'
+                                        ? `Every ${appliance.recurringIntervalDays} days`
+                                        : appliance.recurringInterval.charAt(0) + appliance.recurringInterval.slice(1).toLowerCase()}
+                                </span>
+                            )}
                         </div>
 
                         {(() => {
@@ -340,7 +351,7 @@ export default function ViewAppliancePage() {
 
                 {!appliance.alertDate && (
                     <div className={fieldClass}>
-                        <label className={labelClass}>Maintenance Alert Date</label>
+                        <label className={labelClass}>First Alert Date</label>
                         <div className={valueClass}>—</div>
                     </div>
                 )}

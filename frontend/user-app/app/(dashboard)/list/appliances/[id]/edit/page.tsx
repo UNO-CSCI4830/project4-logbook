@@ -14,8 +14,13 @@ export default function EditAppliancePage() {
     const { triggerRefresh } = useAlertRefresh();
     const [initial, setInitial] = useState<Appliance | null>(null);
 
+    // Fetch appliance data - refetch on every mount and when id changes
     useEffect(() => {
-        (async () => setInitial(await service.get(id)))();
+        (async () => {
+            const data = await service.get(id);
+            setInitial(data);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     async function onSubmit(patch: Appliance) {

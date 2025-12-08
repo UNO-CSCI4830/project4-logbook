@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from "@/components/Pagination";
 import { useToast } from '@/contexts/ToastContext';
+import { useAlertRefresh } from '@/contexts/AlertContext';
 import { ApiClient } from '@/lib/services/ApiClient';
 
 const service = new ApplianceService();
@@ -19,6 +20,7 @@ export default function AppliancesPage() {
     const [deleteing, setDeleteing] = useState<number | null>(null);
     const [error, setError] = useState<string>();
     const { showToast } = useToast();
+    const { triggerRefresh } = useAlertRefresh();
     const alertsChecked = useRef(false);
 
     async function refresh() {
@@ -81,6 +83,7 @@ export default function AppliancesPage() {
         try {
             await service.delete(id);
             await refresh();
+            triggerRefresh(); // Update navbar alert count
         } catch (error: any) {
             alert('Failed to delete: ' + error.message);
         }finally {
@@ -125,8 +128,11 @@ export default function AppliancesPage() {
     const renderRow = (appliance: Appliance) => (
         <tr key={appliance.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-purple-300">
             <td className="p-4 align-middle">
-                <Link href={`/list/appliances/${appliance.id}/view`} className="font-bold hover:underline">
+                <Link href={`/list/appliances/${appliance.id}/view`} className="font-bold hover:underline flex items-center gap-1">
                     {appliance.name}
+                    {appliance.recurringInterval && appliance.recurringInterval !== 'NONE' && (
+                        <span className="text-purple-600" title={`Recurring: ${appliance.recurringInterval}`}>🔄</span>
+                    )}
                 </Link>
             </td>
             <td className="p-4 align-middle">{appliance.brand || '—'}</td>
