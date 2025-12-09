@@ -13,6 +13,8 @@ export class Appliance extends Entity<number> {
   alertDate?: string;      // yyyy-mm-dd
   alertStatus?: string;    // ACTIVE, SNOOZED, CANCELLED
   snoozeUntil?: string;    // yyyy-mm-dd
+  recurringInterval?: string;  // NONE, MONTHLY, YEARLY, CUSTOM
+  recurringIntervalDays?: number;  // For custom intervals
 
   /** Override fromJSON to handle date conversion from backend */
   static fromJSON(json: any): Appliance {
@@ -114,7 +116,9 @@ export class Appliance extends Entity<number> {
       warrantyMonths: this.warrantyMonths,
       conditionText: this.conditionText,
       notes: this.notes,
-      alertDate: this.alertDate
+      alertDate: this.alertDate,
+      recurringInterval: this.recurringInterval,
+      recurringIntervalDays: this.recurringIntervalDays
     };
 
     Object.keys(raw).forEach(k => raw[k] === '' && delete raw[k]);

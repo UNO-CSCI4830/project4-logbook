@@ -198,4 +198,250 @@ class AlertSchedulerServiceTest {
         verify(emailService, times(1)).sendMaintenanceAlert(any(), any()); // Only 1 email sent
         // Orphaned appliance should not trigger email
     }
+
+    @Test
+    void testRecurringAlert_Monthly() {
+        // Arrange
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        LocalDate originalAlertDate = LocalDate.of(2024, 1, 15);
+        Appliance monthlyAppliance = Appliance.builder()
+            .id(1L)
+            .name("Monthly Maintenance Appliance")
+            .alertDate(originalAlertDate)
+            .userId(1L)
+            .recurringInterval("MONTHLY")
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(monthlyAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, monthlyAppliance);
+        verify(applianceRepository, times(1)).save(argThat(appliance ->
+            appliance.getAlertDate().equals(originalAlertDate.plusMonths(1)) &&
+            "ACTIVE".equals(appliance.getAlertStatus()) &&
+            appliance.getSnoozeUntil() == null
+        ));
+    }
+
+    @Test
+    void testRecurringAlert_Yearly() {
+        // Arrange
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        LocalDate originalAlertDate = LocalDate.of(2024, 6, 1);
+        Appliance yearlyAppliance = Appliance.builder()
+            .id(1L)
+            .name("Yearly Maintenance Appliance")
+            .alertDate(originalAlertDate)
+            .userId(1L)
+            .recurringInterval("YEARLY")
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(yearlyAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, yearlyAppliance);
+        verify(applianceRepository, times(1)).save(argThat(appliance ->
+            appliance.getAlertDate().equals(originalAlertDate.plusYears(1)) &&
+            "ACTIVE".equals(appliance.getAlertStatus())
+        ));
+    }
+
+    @Test
+    void testRecurringAlert_Custom() {
+        // Arrange
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        LocalDate originalAlertDate = LocalDate.of(2024, 3, 10);
+        Appliance customAppliance = Appliance.builder()
+            .id(1L)
+            .name("Custom Interval Appliance")
+            .alertDate(originalAlertDate)
+            .userId(1L)
+            .recurringInterval("CUSTOM")
+            .recurringIntervalDays(90)
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(customAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, customAppliance);
+        verify(applianceRepository, times(1)).save(argThat(appliance ->
+            appliance.getAlertDate().equals(originalAlertDate.plusDays(90)) &&
+            "ACTIVE".equals(appliance.getAlertStatus())
+        ));
+    }
+
+    @Test
+    void testRecurringAlert_None() {
+        // Arrange - Test that NONE interval doesn't schedule a new alert
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        LocalDate originalAlertDate = LocalDate.of(2024, 3, 10);
+        Appliance noneAppliance = Appliance.builder()
+            .id(1L)
+            .name("One-time Alert Appliance")
+            .alertDate(originalAlertDate)
+            .userId(1L)
+            .recurringInterval("NONE")
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(noneAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, noneAppliance);
+        // Should not save the appliance (no recurring scheduling)
+        verify(applianceRepository, never()).save(any());
+    }
+
+    @Test
+    void testRecurringAlert_NullInterval() {
+        // Arrange - Test that null interval doesn't schedule a new alert
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        LocalDate originalAlertDate = LocalDate.of(2024, 3, 10);
+        Appliance nullIntervalAppliance = Appliance.builder()
+            .id(1L)
+            .name("No Interval Appliance")
+            .alertDate(originalAlertDate)
+            .userId(1L)
+            .recurringInterval(null)
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(nullIntervalAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, nullIntervalAppliance);
+        // Should not save the appliance (no recurring scheduling)
+        verify(applianceRepository, never()).save(any());
+    }
+
+    @Test
+    void testCheckAndSendAlerts_CancelledAlertNotSent() {
+        // Arrange
+        Appliance cancelledAppliance = Appliance.builder()
+            .id(1L)
+            .name("Cancelled Appliance")
+            .alertDate(LocalDate.now())
+            .userId(1L)
+            .alertStatus("CANCELLED")
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(cancelledAppliance));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, never()).sendMaintenanceAlert(any(), any());
+        verify(applianceRepository, never()).save(any());
+    }
+
+    @Test
+    void testCheckAndSendAlerts_SnoozedAlertReactivated() {
+        // Arrange - Snooze period has ended
+        User testUser = User.builder()
+            .id(1L)
+            .name("Test User")
+            .email("test@example.com")
+            .build();
+
+        Appliance snoozedAppliance = Appliance.builder()
+            .id(1L)
+            .name("Snoozed Appliance")
+            .alertDate(LocalDate.now())
+            .userId(1L)
+            .alertStatus("SNOOZED")
+            .snoozeUntil(LocalDate.now().minusDays(1)) // Snooze ended yesterday
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(snoozedAppliance));
+        when(userRepository.findById(1L))
+            .thenReturn(Optional.of(testUser));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(applianceRepository, times(1)).save(argThat(appliance ->
+            "ACTIVE".equals(appliance.getAlertStatus()) &&
+            appliance.getSnoozeUntil() == null
+        ));
+        verify(emailService, times(1)).sendMaintenanceAlert(testUser, snoozedAppliance);
+    }
+
+    @Test
+    void testCheckAndSendAlerts_SnoozedAlertStillActive() {
+        // Arrange - Snooze period still active
+        Appliance snoozedAppliance = Appliance.builder()
+            .id(1L)
+            .name("Snoozed Appliance")
+            .alertDate(LocalDate.now())
+            .userId(1L)
+            .alertStatus("SNOOZED")
+            .snoozeUntil(LocalDate.now().plusDays(3)) // Snoozed until 3 days from now
+            .build();
+
+        when(applianceRepository.findByAlertDateBefore(any(LocalDate.class)))
+            .thenReturn(Arrays.asList(snoozedAppliance));
+
+        // Act
+        alertSchedulerService.checkAndSendAlerts();
+
+        // Assert
+        verify(emailService, never()).sendMaintenanceAlert(any(), any());
+    }
 }

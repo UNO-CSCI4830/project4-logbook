@@ -90,6 +90,8 @@ public class ApplianceController {
         appliance.setConditionText(applianceDetails.getConditionText());
         appliance.setNotes(applianceDetails.getNotes());
         appliance.setAlertDate(applianceDetails.getAlertDate());
+        appliance.setRecurringInterval(applianceDetails.getRecurringInterval());
+        appliance.setRecurringIntervalDays(applianceDetails.getRecurringIntervalDays());
 
         // If alert date changed, reset alert status to ACTIVE and clear snooze
         if (alertDateChanged) {
@@ -154,6 +156,12 @@ public class ApplianceController {
         }
         if (applianceDetails.getAlertDate() != null) {
             appliance.setAlertDate(applianceDetails.getAlertDate());
+        }
+        if (applianceDetails.getRecurringInterval() != null) {
+            appliance.setRecurringInterval(applianceDetails.getRecurringInterval());
+        }
+        if (applianceDetails.getRecurringIntervalDays() != null) {
+            appliance.setRecurringIntervalDays(applianceDetails.getRecurringIntervalDays());
         }
 
         // If alert date changed, reset alert status to ACTIVE and clear snooze
