@@ -11,8 +11,11 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-      if (!email || !password) {
+      if (!email && !password) {
         alert('Please enter email and password');
+        return;
+      } else if (!password) {
+        alert('Please enter password');
         return;
       }
     
@@ -40,17 +43,25 @@ const LoginPage = () => {
     return (
         <div className="login-container">
             {/* Logo Placeholder */}
-            <div className="logo-placeholder">[Logo]</div>
+            <div className="logo-placeholder"><img src="lizard.png" alt="Logo" /></div>
 
             {/* Welcome Message */}
-            <h2>Welcome to Our App</h2>
+            <h2>Welcome to Eric's Appliance Logbook</h2>
+
+            <p>Please log in to continue</p>
 
             {/* Input Fields */}
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="Email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 <input type="password" placeholder="Password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)}/>
-                <button type="submit" className="go-button">Go!</button>
+                <button type="submit" className="go-button">Login</button>
             </form>
+
+            <div className="forgot-button">
+            <button type="button" onClick={() => router.push('/forgot')}>
+              Forgot Password?
+            </button>
+            </div>
         </div>
     );
 }
