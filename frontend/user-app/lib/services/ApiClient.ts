@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 export class ApiClient {
   readonly http: AxiosInstance;
 
-  constructor(baseURL = process.env.NEXT_PUBLIC_API_BASE) {
+  constructor(baseURL = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8080') {
     this.http = axios.create({
       baseURL,
       headers: { 'Content-Type': 'application/json' },

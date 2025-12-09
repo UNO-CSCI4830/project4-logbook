@@ -13,7 +13,7 @@ const menuItems = [
       },
       {
         icon: "/user.png",
-        label: "Applicances",
+        label: "Appliances",
         href: "/list/appliances",
         visible: ["admin", "user"],
       },

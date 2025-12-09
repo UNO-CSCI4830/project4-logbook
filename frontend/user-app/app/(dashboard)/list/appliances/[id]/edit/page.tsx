@@ -4,20 +4,28 @@ import { useParams, useRouter } from 'next/navigation';
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
 import { ApplianceForm } from '../../shared/ApplianceForm';
+import { useAlertRefresh } from '@/contexts/AlertContext';
 
 const service = new ApplianceService();
 
 export default function EditAppliancePage() {
     const id = Number(useParams()?.id);
     const router = useRouter();
+    const { triggerRefresh } = useAlertRefresh();
     const [initial, setInitial] = useState<Appliance | null>(null);
 
+    // Fetch appliance data - refetch on every mount and when id changes
     useEffect(() => {
-        (async () => setInitial(await service.get(id)))();
+        (async () => {
+            const data = await service.get(id);
+            setInitial(data);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     async function onSubmit(patch: Appliance) {
         await service.update(id, patch);
+        triggerRefresh(); // Update navbar alert count
         router.push(`/list/appliances/${id}/view`);
     }
 
