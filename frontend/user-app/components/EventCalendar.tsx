@@ -38,13 +38,18 @@ const EventCalendar = () => {
     // Custom tile content to add dots on dates with events
     const tileContent = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month' && hasEvent(date)) {
-            return <div className="flex justify-center"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-1"></div></div>;
+            return <div className="flex justify-center"><div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1"></div></div>;
         }
         return null;
     };
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 bg-white rounded-lg shadow-md border-t-5 border-l-2 border-r-2 border-purple-500">
+            <style jsx global>{`
+                .react-calendar__month-view__days__day--weekend {
+                    color: #111827 !important;
+                }
+            `}</style>
             <Calendar 
                 onChange={onChange} 
                 value={value}
@@ -58,7 +63,7 @@ const EventCalendar = () => {
                 <Image src="/calendar-icon.png" alt="Upcoming" width={24} height={24} />
             </div>
             <div className="flex flex-col gap-3">
-                <div className="p-4 rounded-md bg-red-50 border-l-4 border-red-500 shadow-sm">
+                <div className="p-4 rounded-md bg-red-50 border-2 border-red-500 shadow-sm">
                     <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -68,17 +73,17 @@ const EventCalendar = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-medium">HVAC system</p>
                 </div>
-                <div className="p-4 rounded-md bg-amber-50 border-l-4 border-amber-500">
+                <div className="p-4 rounded-md bg-amber-50 border-2 border-amber-500">
                     <div className="flex items-center justify-between">
                         <h2 className="font-semibold text-gray-700">Warranty Expiring</h2>
                         <span className="text-xs text-amber-600 font-medium">In 2 weeks</span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">Dishwasher extended warranty</p>
                 </div>
-                <div className="p-4 rounded-md bg-purple-50 border-l-4 border-purple-500">
+                <div className="p-4 rounded-md bg-blue-50 border-2 border-blue-600">
                     <div className="flex items-center justify-between">
                         <h2 className="font-semibold text-gray-700">Filter Replacement</h2>
-                        <span className="text-xs text-purple-600 font-medium">In 1 month</span>
+                        <span className="text-xs text-blue-600 font-medium">In 1 month</span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">Brita water filter needs replacement</p>
                 </div>
