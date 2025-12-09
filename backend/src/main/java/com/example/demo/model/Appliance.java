@@ -64,6 +64,12 @@ public class Appliance {
     @Column(nullable=true, columnDefinition = "DATE")
     private LocalDate snoozeUntil;
 
+    @Column(nullable=true)
+    private String recurringInterval; // NONE, MONTHLY, YEARLY, CUSTOM
+
+    @Column(nullable=true)
+    private Integer recurringIntervalDays; // For custom intervals (e.g., 90 days)
+
     @Column(nullable = false)
     private Long userId;
 }
