@@ -1,15 +1,17 @@
 'use client'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import EventCalendar from '@/components/EventCalendar';
 
 const Homepage = () => {
   const router = useRouter();
-
+  
   useEffect(() => {
-    // Redirect to dashboard
-    // edit from Ashley: changed this to login so it appears first
-    router.push('/login');
+    // Redirect to login if not authenticated, otherwise to dashboard
+    if (localStorage.getItem('authToken')) {
+      router.push('/user');
+    } else {
+      router.push('/login');
+    }
   }, [router]);
 
   return (
