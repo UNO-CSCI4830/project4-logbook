@@ -9,6 +9,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.demo.model.UserCredentials;
 import com.example.demo.repository.UserRepository;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.Key;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+import javax.crypto.spec.SecretKeySpec;
+
 import com.example.demo.model.User;
 
 
@@ -25,7 +35,20 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody UserCredentials creds) {
         User user = userRepository.findByEmail(creds.getEmail());
         if (user != null && user.getPassword().equals(creds.getPassword())) {
-            return ResponseEntity.ok("Login successful");
+            // Create a Key object from your secret
+            String secret = "superduperextremelysecurekeyfortheapp1"; // must be long enough
+            Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+                                            SignatureAlgorithm.HS256.getJcaName());
+
+            // Generate JWT
+            String token = Jwts.builder()
+                    .setSubject(user.getEmail())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
+                    .signWith(hmacKey)
+                    .compact();
+
+            return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
