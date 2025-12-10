@@ -6,8 +6,11 @@ import { useState, useEffect, useRef} from "react"
 import { ApiClient } from '@/lib/services/ApiClient'
 import { Appliance } from '@/lib/models/Appliance'
 import { useAlertRefresh } from '@/contexts/AlertContext'
+import { UserService } from '@/lib/services/UserService'
+import { useUser } from '@/contexts/UserContext'
 
 const api = new ApiClient();
+const userService = new UserService();
 
 const Navbar = () => {
   const router = useRouter();
@@ -16,6 +19,7 @@ const Navbar = () => {
   const [showAlertDropdown, setShowAlertDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { refreshTrigger } = useAlertRefresh();
+  const { user, setUser, refreshTrigger: userRefreshTrigger } = useUser();
 
   const handleLogout = () => {
     router.push('/login');
@@ -23,6 +27,7 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchAlerts();
+    fetchUserInfo();
     // Refresh alerts every 60 seconds
     const interval = setInterval(fetchAlerts, 60000);
     return () => clearInterval(interval);
@@ -60,6 +65,23 @@ const Navbar = () => {
       console.error('Failed to fetch alerts:', error);
     }
   }
+
+  async function fetchUserInfo() {
+    try {
+      const userData = await userService.getCurrentUser();
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to fetch user info:', error);
+      // Keep user as null if fetch fails
+    }
+  }
+
+  // Refresh user when triggered by other components
+  useEffect(() => {
+    if (userRefreshTrigger > 0) {
+      fetchUserInfo();
+    }
+  }, [userRefreshTrigger]);
 
 
   return (
@@ -147,7 +169,7 @@ const Navbar = () => {
           )}
         </div>
         <div className='flex flex-col'>
-          <span className="text-xs leading-3 font-medium">Alan Turing</span>
+          <span className="text-xs leading-3 font-medium">{user?.name || 'User'}</span>
           <span className="text-[10px] text-gray-500 text-right">User</span>
         </div>
         <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
