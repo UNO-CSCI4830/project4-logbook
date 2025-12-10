@@ -17,7 +17,7 @@ public class SecurityConfig {
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()   // login/signup open
-                .requestMatchers("/api/users/**").authenticated() // protect user endpoints
+                .requestMatchers("/api/users/**").permitAll() // allow - JWT auth handled in controller
                 .anyRequest().permitAll()
             )
 
