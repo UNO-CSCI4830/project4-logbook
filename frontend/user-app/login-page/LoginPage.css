@@ -3,12 +3,12 @@
   flex-direction: column;
   align-items: center;
   margin-top: 100px;
-  font-family: sans-serif;
+
 }
 
 .logo-placeholder {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   background-color: #ccc;
   border-radius: 50%;
   display: flex;
@@ -18,25 +18,52 @@
   font-weight: bold;
 }
 
+h2{
+  font-family: tahoma;
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+p{
+  font-family: georgia;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
 .input-field {
   display: block;
   margin: 10px 0;
   padding: 10px;
   width: 200px;
   font-size: 16px;
+  background-color: #d3d2d2;
 }
 
 .go-button {
   margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px 65px;
+  font-size: 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   display: block;
+  font: trebuchet ms;
   margin: 15px auto 0 auto; /* top, right, bottom, left */
+}
+
+.forgot-button {
+  margin-top: 25px;
+  padding: 8px 10px;
+  font-size: 12px;
+  background-color: #ff3c00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0 auto; /* top, right, bottom, left */
 }
 
 .go-button:hover {
