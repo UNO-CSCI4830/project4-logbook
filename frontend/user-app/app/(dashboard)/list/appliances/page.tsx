@@ -14,11 +14,15 @@ import { ApiClient } from '@/lib/services/ApiClient';
 const service = new ApplianceService();
 const api = new ApiClient();
 
+const ITEMS_PER_PAGE = 10;
+
 export default function AppliancesPage() {
     const [items, setItems] = useState<Appliance[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleteing, setDeleteing] = useState<number | null>(null);
     const [error, setError] = useState<string>();
+    const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const { showToast } = useToast();
     const { triggerRefresh } = useAlertRefresh();
     const alertsChecked = useRef(false);
@@ -76,6 +80,11 @@ export default function AppliancesPage() {
         checkAlerts();
     }, []);
 
+    // Reset to first page when search query changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
+
     async function onDelete(id?: number) {
         if (!id) return;
         if (!confirm('Delete this appliance?')) return;
@@ -90,6 +99,28 @@ export default function AppliancesPage() {
             setDeleteing(null);
         }
     }
+
+    // Filter items based on search query
+    const filteredItems = items.filter((appliance) => {
+        const query = searchQuery.toLowerCase();
+        return (
+            appliance.name?.toLowerCase().includes(query) ||
+            appliance.brand?.toLowerCase().includes(query) ||
+            appliance.model?.toLowerCase().includes(query) ||
+            appliance.category?.toLowerCase().includes(query)
+        );
+    });
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedItems = filteredItems.slice(startIndex, endIndex);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     const columns = [
         { header: "Appliance", accessor: "appliance" },
@@ -179,7 +210,7 @@ export default function AppliancesPage() {
             <div className="flex items-center justify-between">
                 <h1 className="hidden md:block text-lg font-semibold">All Appliances</h1>
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-                    <TableSearch />
+                    <TableSearch value={searchQuery} onChange={setSearchQuery} />
                     <div className="flex items-center gap-4 self-end">
                       <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500">
                         <Image src="/filter.png" alt="" width={14} height={14} />
@@ -203,9 +234,31 @@ export default function AppliancesPage() {
                 </div>
             )}
 
-            {!loading && !error && <Table columns={columns} renderRow={renderRow} data={items} />}
+            {!loading && !error && (
+                <>
+                    {filteredItems.length === 0 ? (
+                        <div className="text-gray-500 mt-4 text-center py-8">
+                            {searchQuery ? `No appliances found matching "${searchQuery}"` : 'No appliances found'}
+                        </div>
+                    ) : (
+                        <>
+                            <Table columns={columns} renderRow={renderRow} data={paginatedItems} />
+                            <div className="mt-2 text-sm text-gray-600 px-4">
+                                Showing {startIndex + 1}-{Math.min(endIndex, filteredItems.length)} of {filteredItems.length} appliances
+                            </div>
+                        </>
+                    )}
+                </>
+            )}
+
             {/* PAGINATION */}
-            <Pagination />
+            {!loading && !error && filteredItems.length > 0 && (
+                <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+            )}
         </section>
     );
 }

@@ -9,7 +9,7 @@ const UserPage = () => {
       {/* Left/Center Content Area */}
       <div className="w-full xl:w-2/3 flex flex-col gap-4">
         {/* Appliance Overview Card */}
-        <div className="bg-grey-100 p-6 rounded-lg shadow-xl hover:shadow-lg transition-shadow cursor-pointer border-t-4 border-purple-500">
+        <div className="bg-grey-500 p-4 rounded-lg shadow-md border-t-5 border-l-2 border-r-2 border-blue-500">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <Image 
@@ -18,10 +18,10 @@ const UserPage = () => {
                 width={40} 
                 height={40}
               />
-              <h2 className="text-2xl font-semibold text-gray-800">Appliance Overview</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">Appliance Overview</h2>
             </div>
             <Link href="/list/appliances">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
                 View All
               </button>
             </Link>
@@ -29,37 +29,45 @@ const UserPage = () => {
 
           {/* Total Appliances */}
           <div className="mb-6">
-            <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-bold text-blue-600">14</span>
-              <span className="text-lg text-gray-600">Total Appliances</span>
+            <div className="flex flex-items-center justify-center gap-2 ">
+              <span className="text-3xl font-bold text-blue-700">14</span>
+              <span className="text-3xl font-semibold text-gray-800">Total Appliances</span>
             </div>
           </div>
 
           {/* By Category */}
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">By Category</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-purple-300">
-                <span className="text-sm font-medium text-gray-700">Kitchen</span>
-                <span className="text-lg font-bold text-blue-600">6</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg hover:bg-purple-300">
-                <span className="text-sm font-medium text-gray-700">Laundry</span>
-                <span className="text-lg font-bold text-purple-600">3</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-purple-300">
-                <span className="text-sm font-medium text-gray-700">HVAC</span>
-                <span className="text-lg font-bold text-green-600">2</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg hover:bg-purple-300">
-                <span className="text-sm font-medium text-gray-700">Other</span>
-                <span className="text-lg font-bold text-amber-600">3</span>
-              </div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-4">By Category</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <Link href="/list/appliances?category=kitchen">
+                <div className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-blue-50 shadow-sm border border-gray-200 cursor-pointer transition-colors">
+                  <span className="text-base font-medium text-gray-900">Kitchen</span>
+                  <span className="text-xl font-semibold text-gray-700">6</span>
+                </div>
+              </Link>
+              <Link href="/list/appliances?category=laundry">
+                <div className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-blue-50 shadow-sm border border-gray-200 cursor-pointer transition-colors">
+                  <span className="text-base font-medium text-gray-900">Laundry</span>
+                  <span className="text-xl font-semibold text-gray-700">3</span>
+                </div>
+              </Link>
+              <Link href="/list/appliances?category=hvac">
+                <div className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-blue-50 shadow-sm border border-gray-200 cursor-pointer transition-colors">
+                  <span className="text-base font-medium text-gray-900">HVAC</span>
+                  <span className="text-xl font-semibold text-gray-700">2</span>
+                </div>
+              </Link>
+              <Link href="/list/appliances?category=other">
+                <div className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-blue-50 shadow-sm border border-gray-200 cursor-pointer transition-colors">
+                  <span className="text-base font-medium text-gray-900">Other</span>
+                  <span className="text-xl font-semibold text-gray-700">3</span>
+                </div>
+              </Link>
             </div>
           </div>
 
           {/* No Reminders Alert */}
-          <div className="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-lg">
+          <div className="p-4 bg-amber-50 border-2 border-amber-500 rounded-lg">
             <div className="flex items-start gap-3">
               <Image 
                 src="/announcement.png" 
@@ -69,12 +77,13 @@ const UserPage = () => {
                 className="flex-shrink-0 mt-1"
               />
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium text-gray-800 mb-2">
                   <span className="font-bold text-amber-700">5 appliances</span> have no reminders set
                 </p>
+                <p className="text-xs text-gray-600 mb-3">Refrigerator, Microwave, Toaster, Coffee Maker, Blender</p>
                 <Link href="/list/appliances">
-                  <button className="text-sm text-amber-700 hover:text-amber-800 font-medium mt-1 underline">
-                    Add reminders →
+                  <button className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium">
+                    Add Reminders
                   </button>
                 </Link>
               </div>
@@ -83,34 +92,61 @@ const UserPage = () => {
         </div>
 
         {/* Alerts & Status Box */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-
-          <Link href="/list/appliances">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border-t-4 border-green-500">
-              <div className="flex flex-col items-center text-center">
-                <Image 
-                  src="/announcement.png" 
-                  alt="Alerts" 
-                  width={48} 
-                  height={48}
-                  className="mb-3"
-                />
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">Alerts & Status</h2>
-                <p className="text-sm text-gray-600">
-                  Check appliance alerts and current status
-                </p>
-                <div className="mt-4">
-                  <span className="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">
-                    2 Active Alerts
-                  </span>
+        <div className="bg-white p-6 rounded-lg shadow-md border-t-5 border-l-2 border-r-2 border-red-500">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Image 
+                src="/announcement.png" 
+                alt="Alerts" 
+                width={40} 
+                height={40}
+              />
+              <h2 className="text-xl font-semibold text-gray-800">Alerts & Status</h2>
+            </div>
+            <span className="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full">
+              2 Active Alerts
+            </span>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="p-4 bg-red-50 border-2 border-red-500 rounded-lg">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-800 mb-1">HVAC Filter Overdue</h3>
+                  <p className="text-sm text-gray-600">Central Air System - Filter replacement past due by 5 days</p>
                 </div>
+                <Link href="/list/appliances">
+                  <button className="text-red-600 hover:text-red-700 text-sm font-medium underline">
+                    View
+                  </button>
+                </Link>
               </div>
             </div>
+            
+            <div className="p-4 bg-amber-50 border-2 border-amber-500 rounded-lg">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-800 mb-1">Dishwasher Warranty Expiring</h3>
+                  <p className="text-sm text-gray-600">Extended warranty expires in 14 days</p>
+                </div>
+                <Link href="/list/appliances">
+                  <button className="text-amber-600 hover:text-amber-700 text-sm font-medium underline">
+                    View
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          
+          <Link href="/list/appliances">
+            <button className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+              View All Appliances
+            </button>
           </Link>
         </div>
 
-        {/* Timeline/Activity Feed - Bigger Box */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        {/* Timeline/Activity Feed */}
+        <div className="bg-white p-6 rounded-lg shadow-md border-t-5 border-l-2 border-r-2 border-gray-300">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-semibold text-gray-800">Activity Timeline</h1>
             <Image 
@@ -119,6 +155,17 @@ const UserPage = () => {
               width={30} 
               height={30}
             />
+          </div>
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <Image 
+              src="/announcement.png" 
+              alt="No Activity" 
+              width={48} 
+              height={48}
+              className="opacity-30 mb-3"
+            />
+            <p className="text-gray-500 text-sm">No recent activity</p>
+            <p className="text-gray-400 text-xs mt-1">Your appliance updates and changes will appear here</p>
           </div>
         </div>
       </div>
