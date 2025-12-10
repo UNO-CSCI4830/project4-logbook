@@ -1,1 +1,15 @@
-backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+# Maven build output
+backend/target/
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven wrapper (optional - uncomment if not using wrapper)
+# backend/.mvn/
+# backend/mvnw
+# backend/mvnw.cmd
