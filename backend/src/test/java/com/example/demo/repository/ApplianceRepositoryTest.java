@@ -29,14 +29,28 @@ class ApplianceRepositoryTest {
     @DisplayName("findAllByUserId returns all appliances belonging to a user")
     void testFindAllByUserId() {
         // Given
-        Appliance a1 = new Appliance(1L, "Dishwasher", "Bosch 300", LocalDate.now(), 1L);
-        Appliance a2 = new Appliance(2L, "Refrigerator", "LG ThinQ", LocalDate.now(), 1L);
-        Appliance a3 = new Appliance(3L, "Fridge", "Samsung", LocalDate.now(), 2L); // different user
+        Appliance a1 = Appliance.builder()
+                .name("Dishwasher")
+                .model("Bosch 300")
+                .alertDate(LocalDate.now())
+                .userId(1L)
+                .build();
+        Appliance a2 = Appliance.builder()
+                .name("Refrigerator")
+                .model("LG ThinQ")
+                .alertDate(LocalDate.now())
+                .userId(1L)
+                .build();
+        Appliance a3 = Appliance.builder()
+                .name("Fridge")
+                .model("Samsung")
+                .alertDate(LocalDate.now())
+                .userId(2L)
+                .build(); // different user
 
-        entityManager.persist(a1);
-        entityManager.persist(a2);
-        entityManager.persist(a3);
-        entityManager.flush();
+        applianceRepository.save(a1);
+        applianceRepository.save(a2);
+        applianceRepository.save(a3);
 
         // When
         List<Appliance> results = applianceRepository.findAllByUserId(1L);
@@ -52,9 +66,13 @@ class ApplianceRepositoryTest {
     @DisplayName("findByUserIdAndId returns appliance for matching user and id")
     void testFindByUserIdAndId() {
         // Given
-        Appliance a1 = new Appliance(1L, "Washer", "LG TurboWash", LocalDate.now(), 5L);
-        entityManager.persist(a1);
-        entityManager.flush();
+        Appliance a1 = Appliance.builder()
+                .name("Washer")
+                .model("LG TurboWash")
+                .alertDate(LocalDate.now())
+                .userId(5L)
+                .build();
+        a1 = applianceRepository.save(a1);
 
         // When
         Optional<Appliance> found =
@@ -69,9 +87,13 @@ class ApplianceRepositoryTest {
     @DisplayName("findByUserIdAndId returns empty when userId does not match")
     void testFindByUserIdAndId_NoMatch() {
         // Given
-        Appliance a1 = new Appliance(1L, "Oven", "GE Profile", LocalDate.now(), 3L);
-        entityManager.persist(a1);
-        entityManager.flush();
+        Appliance a1 = Appliance.builder()
+                .name("Oven")
+                .model("GE Profile")
+                .alertDate(LocalDate.now())
+                .userId(3L)
+                .build();
+        a1 = applianceRepository.save(a1);
 
         // When
         Optional<Appliance> found =

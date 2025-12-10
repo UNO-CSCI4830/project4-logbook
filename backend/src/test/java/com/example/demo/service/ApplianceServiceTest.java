@@ -33,8 +33,19 @@ class ApplianceServiceTest {
     void testGetAllAppliancesByUser() {
         Long userId = 1L;
 
-        Appliance a1 = new Appliance(1L, "Dishwasher", "Bosch 300", LocalDate.now(), userId);
-        Appliance a2 = new Appliance(2L, "Refrigerator", "LG ThinQ", null, userId);
+        Appliance a1 = Appliance.builder()
+                .id(1L)
+                .name("Dishwasher")
+                .model("Bosch 300")
+                .alertDate(LocalDate.now())
+                .userId(userId)
+                .build();
+        Appliance a2 = Appliance.builder()
+                .id(2L)
+                .name("Refrigerator")
+                .model("LG ThinQ")
+                .userId(userId)
+                .build();
         List<Appliance> mockList = Arrays.asList(a1, a2);
 
         when(applianceRepository.findAllByUserId(userId)).thenReturn(mockList);
@@ -49,8 +60,19 @@ class ApplianceServiceTest {
 
     @Test
     void testSaveAppliance() {
-        Appliance appliance = new Appliance(null, "Washer", "Samsung", LocalDate.now(), 1L);
-        Appliance savedAppliance = new Appliance(10L, "Washer", "Samsung", LocalDate.now(), 1L);
+        Appliance appliance = Appliance.builder()
+                .name("Washer")
+                .model("Samsung")
+                .alertDate(LocalDate.now())
+                .userId(1L)
+                .build();
+        Appliance savedAppliance = Appliance.builder()
+                .id(10L)
+                .name("Washer")
+                .model("Samsung")
+                .alertDate(LocalDate.now())
+                .userId(1L)
+                .build();
 
         when(applianceRepository.save(any(Appliance.class))).thenReturn(savedAppliance);
 
