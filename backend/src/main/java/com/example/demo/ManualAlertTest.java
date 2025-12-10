@@ -3,7 +3,6 @@ package com.example.demo;
 import java.util.Date;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.example.demo.service.AlertSchedulerService;
@@ -17,12 +16,11 @@ import com.example.demo.service.AlertSchedulerService;
  * 2. Add some test data to the database with alertDate set to today
  * 3. Run this class as a Java application
  */
-@SpringBootApplication
 public class ManualAlertTest {
 
     public static void main(String[] args) {
-        // Start Spring Boot context
-        ConfigurableApplicationContext context = SpringApplication.run(ManualAlertTest.class, args);
+        // Start Spring Boot context using DemoApplication
+        ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
 
         // Get the scheduler service
         AlertSchedulerService scheduler = context.getBean(AlertSchedulerService.class);

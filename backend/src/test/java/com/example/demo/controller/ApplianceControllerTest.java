@@ -1,34 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Appliance;
-import com.example.demo.service.ApplianceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-
-@WebMvcTest(ApplianceController.class)
-public class ApplianceControllerTest {
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -36,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -44,6 +25,7 @@ import com.example.demo.model.Appliance;
 import com.example.demo.repository.ApplianceRepository;
 import com.example.demo.service.AlertSchedulerService;
 import com.example.demo.service.ApplianceService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(ApplianceController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -56,6 +38,12 @@ class ApplianceControllerTest {
     @MockBean
     private ApplianceService applianceService;
 
+    @MockBean
+    private ApplianceRepository applianceRepository;
+
+    @MockBean
+    private AlertSchedulerService alertSchedulerService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -66,11 +54,21 @@ class ApplianceControllerTest {
         //Appliance appliance1 = new Appliance(1L, "Dishwasher", "Bosch 300", null, userId);
 
         List<Appliance> appliances = Arrays.asList(
-                new Appliance(1L, "Dishwasher", "Bosch 300", null, userId),
-                new Appliance(2L, "Refrigerator", "Samsung FamilyHub", null, userId)
+                Appliance.builder()
+                    .id(1L)
+                    .name("Dishwasher")
+                    .model("Bosch 300")
+                    .userId(userId)
+                    .build(),
+                Appliance.builder()
+                    .id(2L)
+                    .name("Refrigerator")
+                    .model("Samsung FamilyHub")
+                    .userId(userId)
+                    .build()
         );
 
-        Mockito.when(applianceService.getAllAppliancesByUser(userId))
+        when(applianceService.getAllAppliancesByUser(userId))
                .thenReturn(appliances);
 
         mockMvc.perform(get("/api/{userId}/appliances", userId))
@@ -82,10 +80,19 @@ class ApplianceControllerTest {
 
     @Test
     void testCreateAppliance() throws Exception {
-        Appliance input = new Appliance(null, "Washer", "LG TurboWash", null, 1L);
-        Appliance saved = new Appliance(10L, "Washer", "LG TurboWash", null, 1L);
+        Appliance input = Appliance.builder()
+                .name("Washer")
+                .model("LG TurboWash")
+                .userId(1L)
+                .build();
+        Appliance saved = Appliance.builder()
+                .id(10L)
+                .name("Washer")
+                .model("LG TurboWash")
+                .userId(1L)
+                .build();
 
-        Mockito.when(applianceService.saveAppliance(any(Appliance.class)))
+        when(applianceService.saveAppliance(any(Appliance.class)))
                 .thenReturn(saved);
 
         mockMvc.perform(post("/api/{userId}/appliances", 1L)
@@ -94,11 +101,7 @@ class ApplianceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(10)))
                 .andExpect(jsonPath("$.name", is("Washer")));
-    @MockBean
-    private ApplianceRepository applianceRepository;
-
-    @MockBean
-    private AlertSchedulerService alertSchedulerService;
+    }
 
     @Test
     void testTriggerAlerts_Success() throws Exception {
