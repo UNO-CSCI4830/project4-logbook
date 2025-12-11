@@ -77,6 +77,18 @@ class ApplianceControllerTest {
     }
 
     @Test
+    void testGetAllAppliancesByUserId_EmptyList() throws Exception {
+        Long userId = 1L;
+
+        when(applianceService.getAllAppliancesByUser(userId))
+               .thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/api/{userId}/appliances", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     void testGetAppliancesById() throws Exception {
         Long userId = 1L;
         Long applianceId = 2L;
@@ -95,6 +107,17 @@ class ApplianceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.name", is("Dishwasher")));
+    }
+
+    @Test
+    void testGetAppliancesById_NotFound() throws Exception {
+        Long userId = 1L;
+        Long applianceId = 999L;    
+
+        when(applianceRepository.findByUserIdAndId(userId, applianceId))
+               .thenReturn(Optional.empty());    
+        mockMvc.perform(get("/api/{userId}/appliances/{applianceId}", userId, applianceId))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -151,6 +174,58 @@ class ApplianceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Updated Appliance"))
                 .andExpect(jsonPath("$.alertDate").value("2025-12-15"))
+                .andExpect(jsonPath("$.alertStatus").value("ACTIVE"));
+    }
+
+    @Test
+    void testUpdateAppliance_NotFound() throws Exception {
+        // Arrange
+        Long userId = 1L;
+        Long applianceId = 999L;  
+        Appliance updatedAppliance = Appliance.builder()
+            .name("Updated Appliance")
+            .userId(userId)
+            .alertDate(LocalDate.of(2025, 12, 15))
+            .alertStatus("ACTIVE")
+            .build();
+
+        when(applianceRepository.findByUserIdAndId(userId, applianceId)).thenReturn(Optional.empty());
+        // Act & Assert
+        mockMvc.perform(put("/api/{userId}/appliances/{applianceId}", userId, applianceId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAppliance)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testPatchAppliance_Success() throws Exception {
+        // Arrange
+        Long userId = 1L;
+        Long applianceId = 1L;
+
+        Appliance existingAppliance = Appliance.builder()
+                .name("appliance")
+                .userId(userId)
+                .alertDate(LocalDate.of(2025, 12, 1))
+                .build();
+        
+        Appliance patchedAppliance = Appliance.builder()
+            .name("Patched Appliance")
+            .userId(userId)
+            .alertDate(LocalDate.of(2025, 12, 1)) // unchanged
+            .alertStatus("ACTIVE")
+            .build();
+
+        when(applianceRepository.findByUserIdAndId(userId, applianceId)).thenReturn(Optional.of(existingAppliance));
+        when(applianceService.saveAppliance(any(Appliance.class))).thenReturn(patchedAppliance);
+
+        // Act & Assert
+        mockMvc.perform(patch("/api/{userId}/appliances/{applianceId}", userId, applianceId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Patched Appliance\",\"alertStatus\":\"ACTIVE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Patched Appliance"))
+                .andExpect(jsonPath("$.alertDate").value("2025-12-01"))
                 .andExpect(jsonPath("$.alertStatus").value("ACTIVE"));
     }
 
