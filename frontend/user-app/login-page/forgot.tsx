@@ -26,7 +26,7 @@ const ForgotPage = () => {
 
     if (response.ok) {
       alert("Password has been reset! Returning to Login.");
-      router.push('/');
+      router.push('/login');
     } else {
       alert("Invalid email!");
     }
@@ -41,7 +41,7 @@ const ForgotPage = () => {
                 <input type="password" placeholder="New Password" className="input-field" value={newPass} onChange={(e) => setNewPassword(e.target.value)}/>
                 <button type="submit" className="reset-button">Click to reset</button>
             </form>
-      <button type="button" className="back-button" onClick={() => router.push('/')}>
+      <button type="button" className="back-button" onClick={() => router.push('/login')}>
         Click to return without resetting
       </button>
     </div>
