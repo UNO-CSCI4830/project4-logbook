@@ -167,7 +167,23 @@ const Navbar = () => {
           <span className="text-xs leading-3 font-medium">{user?.name || 'User'}</span>
           <span className="text-[10px] text-gray-500 text-right">User</span>
         </div>
-        <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
+        {user?.profilePictureUrl ? (
+          <img 
+            src={user.profilePictureUrl} 
+            alt="Profile" 
+            width={36} 
+            height={36} 
+            className="rounded-full object-cover border-2 border-gray-200"
+          />
+        ) : user?.firstName ? (
+          <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center border-2 border-purple-200">
+            <span className="text-sm text-purple-600 font-bold">
+              {user.firstName.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        ) : (
+          <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
+        )}
         <button
           onClick={handleLogout}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2"

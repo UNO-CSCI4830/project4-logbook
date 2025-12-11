@@ -1,5 +1,7 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   {
@@ -20,7 +22,7 @@ const menuItems = [
       {
         icon: "/about.png",
         label: "About",
-        href: "/list/about",
+        href: "/about",
         visible: ["admin", "user"],
       },
 
@@ -52,6 +54,19 @@ const menuItems = [
 ];
 
 const Menu = () => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Clear any stored authentication data if exists
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+    }
+    // Redirect to login page
+    router.push('/login');
+  };
+
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
@@ -61,6 +76,20 @@ const Menu = () => {
           </span>
           {i.items.map((item) => {
             if (item.visible) {
+              // Special handling for logout
+              if (item.label === "Logout") {
+                return (
+                  <button
+                    onClick={handleLogout}
+                    key={item.label}
+                    className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-purple-300 w-full"
+                  >
+                    <Image src={item.icon} alt="" width={20} height={20} />
+                    <span className="hidden lg:block">{item.label}</span>
+                  </button>
+                );
+              }
+              
               return (
                 <Link
                   href={item.href}

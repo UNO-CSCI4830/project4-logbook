@@ -70,6 +70,26 @@ public class UserController {
         user.setName(request.getName());
       }
 
+      // Update first name if provided
+      if (request.getFirstName() != null) {
+        user.setFirstName(request.getFirstName().isEmpty() ? null : request.getFirstName());
+      }
+
+      // Update last name if provided
+      if (request.getLastName() != null) {
+        user.setLastName(request.getLastName().isEmpty() ? null : request.getLastName());
+      }
+
+      // Update birthday if provided
+      if (request.getBirthday() != null) {
+        user.setBirthday(request.getBirthday());
+      }
+
+      // Update profile picture URL if provided
+      if (request.getProfilePictureUrl() != null) {
+        user.setProfilePictureUrl(request.getProfilePictureUrl().isEmpty() ? null : request.getProfilePictureUrl());
+      }
+
       // Update email if provided and different
       if (request.getEmail() != null && !request.getEmail().isEmpty()) {
         // Check if new email is already taken by another user
