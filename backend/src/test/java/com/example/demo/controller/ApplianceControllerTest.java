@@ -230,6 +230,26 @@ class ApplianceControllerTest {
     }
 
     @Test
+    void testPatchAppliance_NotFound() throws Exception {
+        // Arrange
+        Long userId = 1L;
+        Long applianceId = 999L;  
+        Appliance updatedAppliance = Appliance.builder()
+            .name("Updated Appliance")
+            .userId(userId)
+            .alertDate(LocalDate.of(2025, 12, 15))
+            .alertStatus("ACTIVE")
+            .build();
+
+        when(applianceRepository.findByUserIdAndId(userId, applianceId)).thenReturn(Optional.empty());
+        // Act & Assert
+        mockMvc.perform(put("/api/{userId}/appliances/{applianceId}", userId, applianceId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAppliance)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void testDeleteAppliance_Success() throws Exception {
         // Arrange
         Long userId = 1L;
