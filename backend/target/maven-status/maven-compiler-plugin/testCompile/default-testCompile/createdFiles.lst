@@ -1,4 +1,3 @@
-com/example/demo/repository/ApplianceRepositoryTest.class
 com/example/demo/controller/UserControllerTest.class
 com/example/demo/service/ApplianceServiceTest.class
 com/example/demo/service/AlertSchedulerServiceTest.class

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.example.demo.repository.ApplianceRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 1.501 s <<< FAILURE! -- in com.example.demo.repository.ApplianceRepositoryTest
-com.example.demo.repository.ApplianceRepositoryTest.testFindAllByUserId -- Time elapsed: 0.284 s <<< ERROR!
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 1.476 s <<< FAILURE! -- in com.example.demo.repository.ApplianceRepositoryTest
+com.example.demo.repository.ApplianceRepositoryTest.testFindAllByUserId -- Time elapsed: 0.290 s <<< ERROR!
 org.springframework.dao.DataIntegrityViolationException: 
 could not execute statement [NULL not allowed for column "ID"; SQL statement:
 insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) [23502-224]] [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [null]
@@ -18,7 +18,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
-	at jdk.proxy2/jdk.proxy2.$Proxy121.save(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy118.save(Unknown Source)
 	at com.example.demo.repository.ApplianceRepositoryTest.testFindAllByUserId(ApplianceRepositoryTest.java:51)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
@@ -54,7 +54,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:319)
-	at jdk.proxy2/jdk.proxy2.$Proxy114.persist(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy111.persist(Unknown Source)
 	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.save(SimpleJpaRepository.java:626)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
@@ -94,7 +94,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:194)
 	... 57 more
 
-com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId_NoMatch -- Time elapsed: 0.003 s <<< ERROR!
+com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId_NoMatch -- Time elapsed: 0.005 s <<< ERROR!
 org.springframework.dao.DataIntegrityViolationException: 
 could not execute statement [NULL not allowed for column "ID"; SQL statement:
 insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) [23502-224]] [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [null]
@@ -110,7 +110,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
-	at jdk.proxy2/jdk.proxy2.$Proxy121.save(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy118.save(Unknown Source)
 	at com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId_NoMatch(ApplianceRepositoryTest.java:96)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
@@ -146,7 +146,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:319)
-	at jdk.proxy2/jdk.proxy2.$Proxy114.persist(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy111.persist(Unknown Source)
 	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.save(SimpleJpaRepository.java:626)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
@@ -186,7 +186,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.executeUpdate(ResultSetReturnImpl.java:194)
 	... 57 more
 
-com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId -- Time elapsed: 0.003 s <<< ERROR!
+com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId -- Time elapsed: 0.004 s <<< ERROR!
 org.springframework.dao.DataIntegrityViolationException: 
 could not execute statement [NULL not allowed for column "ID"; SQL statement:
 insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) [23502-224]] [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; SQL [insert into appliances (alert_date,alert_status,brand,category,condition_text,description,model,name,notes,purchase_date,recurring_interval,recurring_interval_days,serial_number,snooze_until,user_id,warranty_months) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)]; constraint [null]
@@ -202,7 +202,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
-	at jdk.proxy2/jdk.proxy2.$Proxy121.save(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy118.save(Unknown Source)
 	at com.example.demo.repository.ApplianceRepositoryTest.testFindByUserIdAndId(ApplianceRepositoryTest.java:75)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
@@ -238,7 +238,7 @@ insert into appliances (alert_date,alert_status,brand,category,condition_text,de
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:319)
-	at jdk.proxy2/jdk.proxy2.$Proxy114.persist(Unknown Source)
+	at jdk.proxy2/jdk.proxy2.$Proxy111.persist(Unknown Source)
 	at org.springframework.data.jpa.repository.support.SimpleJpaRepository.save(SimpleJpaRepository.java:626)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
