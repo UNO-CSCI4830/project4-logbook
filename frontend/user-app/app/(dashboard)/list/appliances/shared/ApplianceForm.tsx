@@ -210,6 +210,17 @@ export function ApplianceForm({ initial, onSubmit }: ApplianceFormProps) {
                     </div>
                 )}
 
+                <div>
+                <label htmlFor="file" className={labelClass}>File Upload</label>
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={false}
+                        type="button"
+                    >
+                        Upload
+                    </button>
+                </div>
+
                 <div className="md:col-span-2">
                     <label htmlFor="notes" className={labelClass}>Notes</label>
                     <textarea
