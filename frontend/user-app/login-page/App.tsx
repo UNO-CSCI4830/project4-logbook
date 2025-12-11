@@ -1,17 +1,12 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginPage from "./LoginPage.js";
-import ExamplePage from "./example_page.js";
-import ForgotPage from "./forgot.js";
 
-const App = () => {
+function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/example" element={<ExamplePage />} />
-        <Route path="/forgot" element={<ForgotPage />} />
-      </Routes>
+      <Switch>
+        <Route exact path="/" component={LoginPage} />
+      </Switch>
     </Router>
   );
 }
