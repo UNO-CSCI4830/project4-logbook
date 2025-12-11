@@ -8,9 +8,9 @@ const Homepage = () => {
   useEffect(() => {
     // Redirect to login if not authenticated, otherwise to dashboard
     if (localStorage.getItem('authToken')) {
-      router.push('/user');
-    } else {
       router.push('/login');
+    } else {
+      router.push('/user');
     }
   }, [router]);
 
