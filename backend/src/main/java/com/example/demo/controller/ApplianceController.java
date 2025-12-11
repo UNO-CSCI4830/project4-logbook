@@ -25,7 +25,10 @@ import com.example.demo.service.ApplianceService;
 import com.example.demo.service.AlertSchedulerService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "https://myappliancelogbook.com"
+})
 @RequestMapping("/api/{userId}/appliances")
 public class ApplianceController {
     private final ApplianceService applianceService;

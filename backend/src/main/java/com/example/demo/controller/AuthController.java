@@ -22,7 +22,10 @@ import javax.crypto.spec.SecretKeySpec;
 import com.example.demo.model.User;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "https://myappliancelogbook.com"
+})
 @RestController
 public class AuthController {
     private final UserRepository userRepository;

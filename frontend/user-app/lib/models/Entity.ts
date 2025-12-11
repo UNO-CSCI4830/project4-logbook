@@ -1,8 +1,8 @@
 export abstract class Entity<ID = number> {
   constructor(public id?: ID) {}
 
-  /** Create a domain instance from raw JSON */
-  static fromJSON<T>(this: new () => T, json: unknown): T {
+ /** Create a domain instance from raw JSON */
+  static fromJSON<T extends Entity<any>>(this: new () => T, json: unknown): T {
     return Object.assign(new this(), json);
   }
 

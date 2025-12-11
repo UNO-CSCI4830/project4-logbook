@@ -17,16 +17,21 @@ export class Appliance extends Entity<number> {
   recurringIntervalDays?: number;  // For custom intervals
 
   /** Override fromJSON to handle date conversion from backend */
-  static fromJSON(json: any): Appliance {
-    const instance = new Appliance();
-    Object.assign(instance, json);
+  static override fromJSON<T extends Entity<any>>(
+    this: new () => T,
+    json: any
+  ): T {
+    const instance = Object.assign(new this(), json) as T & {
+      alertDate?: any;
+      purchaseDate?: any;
+    }
 
     // Convert Date objects or timestamps to yyyy-mm-dd strings
     if (json.alertDate) {
-      instance.alertDate = this.toDateString(json.alertDate);
+      (instance as any).alertDate = Appliance.toDateString((json as any).alertDate);
     }
     if (json.purchaseDate) {
-      instance.purchaseDate = this.toDateString(json.purchaseDate);
+      (instance as any).purchaseDate = Appliance.toDateString((json as any).purchaseDate);
     }
 
     return instance;
@@ -118,7 +123,7 @@ export class Appliance extends Entity<number> {
       notes: this.notes,
       alertDate: this.alertDate,
       recurringInterval: this.recurringInterval,
-      recurringIntervalDays: this.recurringIntervalDays
+      recurringIntervalDays: this.recurringIntervalDays,
     };
 
     Object.keys(raw).forEach(k => raw[k] === '' && delete raw[k]);
