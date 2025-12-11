@@ -351,9 +351,3 @@ npm start
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://react.dev/)
-
----
-
-## Support
-
-For issues or questions related to this project, please contact your course instructor or teaching assistant.
