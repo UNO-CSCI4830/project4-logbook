@@ -8,6 +8,7 @@ import { Appliance } from '@/lib/models/Appliance'
 import { useAlertRefresh } from '@/contexts/AlertContext'
 import { UserService } from '@/lib/services/UserService'
 import { useUser } from '@/contexts/UserContext'
+import { getStatusBadgeColor } from '@/lib/utils/statusColors'
 
 const api = new ApiClient();
 const userService = new UserService();
@@ -139,7 +140,7 @@ const Navbar = () => {
                           </p>
                         </div>
                         <div className='flex-shrink-0'>
-                          <span className='inline-block px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded'>
+                          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getStatusBadgeColor(appliance.alertStatus)}`}>
                             {appliance.alertStatus || 'ACTIVE'}
                           </span>
                         </div>

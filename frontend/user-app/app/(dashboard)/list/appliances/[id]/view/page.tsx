@@ -6,6 +6,7 @@ import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
 import { useToast } from '@/contexts/ToastContext';
 import { useAlertRefresh } from '@/contexts/AlertContext';
+import { getStatusBadgeColor } from '@/lib/utils/statusColors';
 
 const service = new ApplianceService();
 
@@ -128,13 +129,8 @@ export default function ViewAppliancePage() {
 
     const getStatusBadge = () => {
         const status = appliance.alertStatus || 'ACTIVE';
-        const colors = {
-            ACTIVE: 'bg-green-100 text-green-800',
-            SNOOZED: 'bg-yellow-100 text-yellow-800',
-            CANCELLED: 'bg-gray-100 text-gray-800'
-        };
         return (
-            <span className={`px-2 py-1 rounded text-sm font-medium ${colors[status as keyof typeof colors]}`}>
+            <span className={`px-2 py-1 rounded text-sm font-medium ${getStatusBadgeColor(status)}`}>
                 {status}
             </span>
         );

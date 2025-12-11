@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Appliance } from '@/lib/models/Appliance';
 import { ApplianceService } from '@/lib/services/ApplianceService';
+import { getStatusBadgeColor } from '@/lib/utils/statusColors';
 
 const service = new ApplianceService();
 
@@ -501,11 +502,7 @@ const UserPage = () => {
                       {/* Status indicator */}
                       {activity.status && (
                         <div className="mt-2">
-                          <span className={`text-xs px-2 py-0.5 rounded ${
-                            activity.status === 'ACTIVE' ? 'bg-green-100 text-green-700' :
-                            activity.status === 'SNOOZED' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-gray-100 text-gray-700'
-                          }`}>
+                          <span className={`text-xs px-2 py-0.5 rounded ${getStatusBadgeColor(activity.status)}`}>
                             {activity.status}
                           </span>
                         </div>
