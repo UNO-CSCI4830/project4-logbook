@@ -3,7 +3,11 @@ import { User } from '@/lib/models/User';
 
 export interface UpdateProfileRequest {
   name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
+  birthday?: string;
+  profilePictureUrl?: string;
 }
 
 export interface ChangePasswordRequest {
@@ -33,14 +37,24 @@ export class UserService {
     const response = await this.api.http.get('/api/users/me', {
       headers: this.getAuthHeader()
     });
-    return new User(response.data.name, response.data.email, undefined, response.data.id);
+    const user = new User(response.data.name, response.data.email, undefined, response.data.id);
+    user.firstName = response.data.firstName;
+    user.lastName = response.data.lastName;
+    user.birthday = response.data.birthday;
+    user.profilePictureUrl = response.data.profilePictureUrl;
+    return user;
   }
 
   async updateProfile(request: UpdateProfileRequest): Promise<User> {
     const response = await this.api.http.put('/api/users/me', request, {
       headers: this.getAuthHeader()
     });
-    return new User(response.data.name, response.data.email, undefined, response.data.id);
+    const user = new User(response.data.name, response.data.email, undefined, response.data.id);
+    user.firstName = response.data.firstName;
+    user.lastName = response.data.lastName;
+    user.birthday = response.data.birthday;
+    user.profilePictureUrl = response.data.profilePictureUrl;
+    return user;
   }
 
   async changePassword(request: ChangePasswordRequest): Promise<string> {

@@ -8,6 +8,7 @@ import { Appliance } from '@/lib/models/Appliance'
 import { useAlertRefresh } from '@/contexts/AlertContext'
 import { UserService } from '@/lib/services/UserService'
 import { useUser } from '@/contexts/UserContext'
+import { getStatusBadgeColor } from '@/lib/utils/statusColors'
 
 const api = new ApiClient();
 const userService = new UserService();
@@ -86,11 +87,6 @@ const Navbar = () => {
 
   return (
     <div className='flex items-center justify-between p-4'>
-      {/* Search bar */}
-      <div className='hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2'>
-        <Image src="/search.png" alt="" width={14} height={14}/>
-        <input type="text" placeholder="Search..." className="w-[200px] p-2 bg-transparent outline-none"/>
-      </div>
       {/* Icons and users */}
       <div className='flex items-center gap-6 justify-end w-full'>
         <div className='bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer'>
@@ -144,7 +140,7 @@ const Navbar = () => {
                           </p>
                         </div>
                         <div className='flex-shrink-0'>
-                          <span className='inline-block px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded'>
+                          <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getStatusBadgeColor(appliance.alertStatus)}`}>
                             {appliance.alertStatus || 'ACTIVE'}
                           </span>
                         </div>
@@ -172,7 +168,23 @@ const Navbar = () => {
           <span className="text-xs leading-3 font-medium">{user?.name || 'User'}</span>
           <span className="text-[10px] text-gray-500 text-right">User</span>
         </div>
-        <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
+        {user?.profilePictureUrl ? (
+          <img 
+            src={user.profilePictureUrl} 
+            alt="Profile" 
+            width={36} 
+            height={36} 
+            className="rounded-full object-cover border-2 border-gray-200"
+          />
+        ) : user?.firstName ? (
+          <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center border-2 border-purple-200">
+            <span className="text-sm text-purple-600 font-bold">
+              {user.firstName.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        ) : (
+          <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/>
+        )}
         <button
           onClick={handleLogout}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-2"

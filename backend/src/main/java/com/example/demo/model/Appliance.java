@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +31,6 @@ public class Appliance {
     @Column(nullable=true)
     private String description;
 
-    @Column(nullable=true)
-    private LocalDate alertDate;
     private String category;
 
     @Column(nullable=true)

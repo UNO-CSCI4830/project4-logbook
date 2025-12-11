@@ -10,6 +10,9 @@ import Pagination from "@/components/Pagination";
 import { useToast } from '@/contexts/ToastContext';
 import { useAlertRefresh } from '@/contexts/AlertContext';
 import { ApiClient } from '@/lib/services/ApiClient';
+import FilterDropdown from '@/components/FilterDropdown';
+import SortDropdown from '@/components/SortDropdown';
+import TaskColorBadge from '@/components/TaskColorBadge';
 
 const service = new ApplianceService();
 const api = new ApiClient();
@@ -23,6 +26,12 @@ export default function AppliancesPage() {
     const [error, setError] = useState<string>();
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    const [selectedStatus, setSelectedStatus] = useState<string>("all");
+    const [sortField, setSortField] = useState<string>("name");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+    const [showSortDropdown, setShowSortDropdown] = useState(false);
     const { showToast } = useToast();
     const { triggerRefresh } = useAlertRefresh();
     const alertsChecked = useRef(false);
@@ -83,7 +92,7 @@ export default function AppliancesPage() {
     // Reset to first page when search query changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery]);
+    }, [searchQuery, selectedCategory, selectedStatus]);
 
     async function onDelete(id?: number) {
         if (!id) return;
@@ -100,22 +109,77 @@ export default function AppliancesPage() {
         }
     }
 
-    // Filter items based on search query
+    // Get unique categories for filter dropdown
+    const uniqueCategories = Array.from(new Set(items.map(item => item.category).filter(Boolean))) as string[];
+
+    // Filter items based on search query, category, and status
     const filteredItems = items.filter((appliance) => {
+        // Search filter
         const query = searchQuery.toLowerCase();
-        return (
+        const matchesSearch = !query || (
             appliance.name?.toLowerCase().includes(query) ||
             appliance.brand?.toLowerCase().includes(query) ||
             appliance.model?.toLowerCase().includes(query) ||
             appliance.category?.toLowerCase().includes(query)
         );
+
+        // Category filter
+        const matchesCategory = selectedCategory === "all" || appliance.category === selectedCategory;
+
+        // Status filter
+        let matchesStatus = true;
+        if (selectedStatus !== "all") {
+            if (selectedStatus === "ACTIVE") {
+                matchesStatus = appliance.alertStatus === "ACTIVE";
+            } else if (selectedStatus === "SNOOZED") {
+                matchesStatus = appliance.alertStatus === "SNOOZED";
+            } else if (selectedStatus === "CANCELLED") {
+                matchesStatus = appliance.alertStatus === "CANCELLED";
+            } else if (selectedStatus === "NO_ALERT") {
+                matchesStatus = !appliance.alertDate;
+            }
+        }
+
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    // Sort filtered items
+    const sortedItems = [...filteredItems].sort((a, b) => {
+        let aValue: any;
+        let bValue: any;
+
+        switch (sortField) {
+            case 'name':
+                aValue = a.name?.toLowerCase() || '';
+                bValue = b.name?.toLowerCase() || '';
+                break;
+            case 'brand':
+                aValue = a.brand?.toLowerCase() || '';
+                bValue = b.brand?.toLowerCase() || '';
+                break;
+            case 'category':
+                aValue = a.category?.toLowerCase() || '';
+                bValue = b.category?.toLowerCase() || '';
+                break;
+            case 'alertDate':
+                aValue = a.alertDate ? new Date(a.alertDate).getTime() : 0;
+                bValue = b.alertDate ? new Date(b.alertDate).getTime() : 0;
+                break;
+            default:
+                aValue = a.name?.toLowerCase() || '';
+                bValue = b.name?.toLowerCase() || '';
+        }
+
+        if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
     });
 
     // Calculate pagination
-    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(sortedItems.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    const paginatedItems = filteredItems.slice(startIndex, endIndex);
+    const paginatedItems = sortedItems.slice(startIndex, endIndex);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -131,30 +195,6 @@ export default function AppliancesPage() {
         { header: "Status", accessor: "status" },
         { header: "Actions", accessor: "actions", className: "" },
     ];
-
-    const getStatusBadge = (appliance: Appliance) => {
-        if (!appliance.alertDate) return null;
-
-        const status = appliance.alertStatus || 'ACTIVE';
-        const colors = {
-            ACTIVE: 'bg-green-100 text-green-800',
-            SNOOZED: 'bg-yellow-100 text-yellow-800',
-            CANCELLED: 'bg-gray-100 text-gray-800'
-        };
-
-        return (
-            <div className="flex flex-col gap-1">
-                <span className={`px-2 py-1 rounded text-sm font-medium w-fit ${colors[status as keyof typeof colors]}`}>
-                    {status}
-                </span>
-                {status === 'SNOOZED' && appliance.snoozeUntil && (
-                    <span className="text-xs text-gray-600">
-                        until {new Date(appliance.snoozeUntil + 'T00:00:00').toLocaleDateString()}
-                    </span>
-                )}
-            </div>
-        );
-    };
 
     const renderRow = (appliance: Appliance) => (
         <tr key={appliance.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-purple-300">
@@ -175,7 +215,11 @@ export default function AppliancesPage() {
                     : '—'}
             </td>
             <td className="p-4 align-middle">
-                {getStatusBadge(appliance) || '—'}
+                <TaskColorBadge
+                    alertDate={appliance.alertDate}
+                    snoozeUntil={appliance.snoozeUntil}
+                    alertStatus={appliance.alertStatus}
+                />
             </td>
             <td className="p-4 align-middle text-right">
                 <div className="flex items-center gap-2">
@@ -212,13 +256,31 @@ export default function AppliancesPage() {
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch value={searchQuery} onChange={setSearchQuery} />
                     <div className="flex items-center gap-4 self-end">
-                      <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500">
-                        <Image src="/filter.png" alt="" width={14} height={14} />
-                      </button>
-                      <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500">
-                        <Image src="/quicksort.png" alt="" width={14} height={14} />
-                      </button>
-                      <Link href="/list/appliances/new" className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500">
+                      <FilterDropdown
+                        show={showFilterDropdown}
+                        onToggle={() => setShowFilterDropdown(!showFilterDropdown)}
+                        selectedCategory={selectedCategory}
+                        selectedStatus={selectedStatus}
+                        categories={uniqueCategories}
+                        onCategoryChange={setSelectedCategory}
+                        onStatusChange={setSelectedStatus}
+                        onClearAll={() => {
+                          setSelectedCategory("all");
+                          setSelectedStatus("all");
+                        }}
+                        resultCount={filteredItems.length}
+                      />
+                      
+                      <SortDropdown
+                        show={showSortDropdown}
+                        onToggle={() => setShowSortDropdown(!showSortDropdown)}
+                        sortField={sortField}
+                        sortOrder={sortOrder}
+                        onFieldChange={setSortField}
+                        onOrderChange={setSortOrder}
+                      />
+                      
+                      <Link href="/list/appliances/new" className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 hover:bg-yellow-600">
                         <Image src="/create.png" alt="Add Appliance" width={14} height={14} />
                       </Link>
                     </div>
