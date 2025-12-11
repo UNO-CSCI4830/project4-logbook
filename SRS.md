@@ -316,24 +316,6 @@ The system shall ensure the application functions across different platforms, de
 **NFR-5.5**: The application shall support different screen sizes and resolutions (minimum 320px width)
 **NFR-5.6**: The system shall not have platform-specific dependencies
 
-### 4.6 Usability
-
-**NFR-6.1**: The user interface shall be intuitive and require minimal training
-**NFR-6.2**: The application shall provide clear error messages and validation feedback
-**NFR-6.3**: Navigation shall be consistent throughout the application
-**NFR-6.4**: Color coding shall follow accessibility guidelines (WCAG 2.1 Level AA)
-**NFR-6.5**: The application shall provide helpful tooltips and inline documentation
-**NFR-6.6**: Forms shall provide real-time validation feedback
-
-### 4.7 Maintainability
-
-**NFR-7.1**: Code shall follow standard Java and TypeScript conventions
-**NFR-7.2**: The system shall include unit tests for core functionality (minimum 70% coverage)
-**NFR-7.3**: The codebase shall be version-controlled using Git with meaningful commit messages
-**NFR-7.4**: The system shall include comprehensive API documentation
-**NFR-7.5**: Code shall be modular and follow separation of concerns principles
-**NFR-7.6**: The system shall include README, SRS, and installation documentation
-
 ---
 
 ## 5. System Features
