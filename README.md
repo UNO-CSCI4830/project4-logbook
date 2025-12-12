@@ -29,6 +29,10 @@ A full-stack web application for tracking household appliances, warranties, and 
 Login into our website with the following link:
 https://myappliancelogbook.com/ 
 
+Login credentials for the test user: 
+User email: dev@test.com
+password: dev123
+
 ### Local Development
 #### Backend
 
